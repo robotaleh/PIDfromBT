@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PIDfromBT</string>
+    <string name="tituloPrincipal">PIDfromBT</string>
 </resources>
