@@ -15,15 +15,54 @@
         android:id="@+id/titP1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tituloPrincipal"
         android:gravity="center"
+        android:text="@string/tituloPrincipal"
         android:textColor="#3d8fbe"
         android:textSize="25sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/imageMain"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
         android:src="@drawable/main_img"
-        android:layout_gravity="center"/>
+        android:contentDescription="@string/logoContentDesc"/>
+
+    <LinearLayout
+        android:baselineAligned="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btnListar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_refresh_black_48dp"
+            android:text="@string/actualizarPareados"
+            android:textSize="15sp"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+
+        <Button
+            android:id="@+id/btnBuscar"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_search_black_48dp"
+            android:text="@string/buscarNuevos"
+            android:textSize="15sp"
+            style="?android:attr/buttonBarButtonStyle"/>
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/listBT"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </LinearLayout>

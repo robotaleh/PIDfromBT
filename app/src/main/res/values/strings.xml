@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PIDfromBT</string>
     <string name="tituloPrincipal">PIDfromBT</string>
+    <string name="actualizarPareados">Actualizar\nvinculados</string>
+    <string name="buscarNuevos">Buscar nuevos\ndispositivos</string>
+    <string name="logoContentDesc">Logo extendido de la APP</string>
 </resources>
