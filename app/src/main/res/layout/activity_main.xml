@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_refresh_black_48dp"
             android:text="@string/actualizarPareados"
-            android:textSize="15sp"
+            android:textSize="13sp"
             style="?android:attr/buttonBarButtonStyle"/>
 
 
@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_search_black_48dp"
             android:text="@string/buscarNuevos"
-            android:textSize="15sp"
+            android:textSize="13sp"
             style="?android:attr/buttonBarButtonStyle"/>
     </LinearLayout>
 
