@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden" android:name=".PIDManager"></activity>
     </application>
 
 </manifest>
