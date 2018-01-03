@@ -24,6 +24,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private void assignListeners(ImageView logoMain, ListView listPaired, Button btnListPaired, Button btnSearch) {
         if (logoMain != null) logoMain.setOnLongClickListener(longClickInfo);
         if (listPaired != null) listPaired.setOnItemClickListener(listPairedItemClickListener);
+        if (listPaired != null) listPaired.setOnItemLongClickListener(listPairedItemLongClickListener);
         if (btnListPaired != null) btnListPaired.setOnClickListener(listPairedBTsClickListener);
         if (btnSearch != null) btnSearch.setOnClickListener(searchNewBTDevicesClickListener);
     }
@@ -147,9 +149,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth Vinculados.", Toast.LENGTH_SHORT).show();
             }
 
-            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, list);
             listPaired.setAdapter(adapter);
             listPaired.setOnItemClickListener(listPairedItemClickListener);
+            listPaired.setOnItemLongClickListener(listPairedItemLongClickListener);
         } else {
             initBT(ACT_PAIRED);
         }
@@ -165,9 +168,10 @@ public class MainActivity extends AppCompatActivity {
         if (foundDevices.size() == 0 && finished) {
             Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth disponibles.", Toast.LENGTH_SHORT).show();
         }
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, foundDevices);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, foundDevices);
         listPaired.setAdapter(adapter);
         listPaired.setOnItemClickListener(foundListItemClickListener);
+        listPaired.setOnLongClickListener(null);
     }
 
     /**
@@ -258,8 +262,8 @@ public class MainActivity extends AppCompatActivity {
                     if (BTAdapter.isDiscovering()) {
                         BTAdapter.cancelDiscovery();
                     }
-                    pairedDevicesList();
                 }
+                pairedDevicesList();
             }
         }
     };
@@ -329,13 +333,11 @@ public class MainActivity extends AppCompatActivity {
                 String info = ((TextView) v).getText().toString();
                 String address = info.substring(info.length() - 17);
                 // Make an intent to start next activity.
-                /*Intent i = new Intent(MainActivity.this, PIDmanager.class);
+                Intent i = new Intent(MainActivity.this, PIDManager.class);
                 //Change the activity.
                 if(!DEBUG)
-                    i.putExtra("EXTRA_ADDRESS", address); //this will be received at ledControl (class) Activity
-
-                startActivity(i);*/
-                Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
+                    i.putExtra("BT_ADDRESS", address);
+                startActivity(i);
             } else {
                 initBT(ACT_PAIRED);
             }
@@ -360,6 +362,27 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Toast.makeText(MainActivity.this, "Se ha producido un error:\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        }
+    };
+
+    /**
+     * Listener de pulsación larga sobre un item de la lista de BTs vinculados para desemparejarlo.
+     */
+    private AdapterView.OnItemLongClickListener listPairedItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            String info = ((TextView) view).getText().toString();
+            String address = info.substring(info.length() - 17);
+
+            BluetoothDevice device = BTAdapter.getRemoteDevice(address);
+            try {
+                Method m = device.getClass()
+                        .getMethod("removeBond", (Class[]) null);
+                m.invoke(device, (Object[]) null);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Error al Desemparejar", Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
     };
 }
