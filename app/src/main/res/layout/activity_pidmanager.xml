@@ -20,7 +20,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingBottom="5dp"
-            android:background="#c0ca33">
+            android:background="#c0ca33"
+            android:visibility="gone">
             <CheckBox
                 android:id="@+id/autoScroll"
                 android:layout_width="wrap_content"
@@ -61,121 +62,27 @@
                 android:src="@drawable/ic_delete_black_48dp" />
         </RelativeLayout>
 
-
-        <!--<ScrollView-->
-            <!--android:id="@+id/scrollLog"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-
-            <!--android:background="#c0ca33"-->
-            <!--android:padding="5dp">-->
-
             <TextView
                 android:id="@+id/consola"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#424242"
                 android:layout_gravity="fill"
-                android:layout_marginTop="0dp"
-                android:paddingTop="0dp"
+                android:paddingTop="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="asdfasdf\nasdfasdf\nasdfasdf\nasd3asdf\nasdf4asdf\na5sdfasdf\na6sdfasdf\nasd7fasdf\nasd7fasdf\nasd7fas3df\nasd7f4asdf\nasd7fa5sdf\npato"
+                android:text=""
                 android:textColor="#fff"
                 android:textSize="15sp"
                 android:scrollbars = "vertical"
                 android:gravity="bottom"/>
-        <!--</ScrollView>-->
 
     </LinearLayout>
-
-
-
-
-
-
-    <!--<RelativeLayout
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:background="#c0ca33"
-        android:padding="5dp">
-
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scrollLog"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-
-            android:background="#c0ca33"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/consola"
-                android:layout_width="match_parent"
-
-
-                android:layout_height="match_parent"
-                android:background="#424242"
-                android:gravity="bottom|start"
-                android:padding="5dp"
-                android:text=""
-                android:textColor="#fff"
-                android:textSize="15sp" />
-        </android.support.v4.widget.NestedScrollView>
-
-
-        <CheckBox
-            android:id="@+id/autoScroll"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_alignParentEnd="true"
-            android:background="#c0ca33"
-            android:backgroundTint="#c0ca33"
-            android:checked="true"
-            android:padding="2dp"
-            android:text="Autoscroll" />
-
-        <ImageButton
-            android:id="@+id/back"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
-            android:background="#c0ca33"
-            android:backgroundTint="#c0ca33"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_navigate_before_black_48dp" />
-
-        <ImageButton
-            android:id="@+id/next"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
-            android:layout_toRightOf="@id/back"
-            android:background="#c0ca33"
-            android:backgroundTint="#c0ca33"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_navigate_next_black_48dp" />
-
-        <ImageButton
-            android:id="@+id/clearLog"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_toRightOf="@id/next"
-            android:background="#c0ca33"
-            android:backgroundTint="#c0ca33"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_delete_black_48dp" />
-
-    </RelativeLayout>-->
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="0dp"
@@ -183,7 +90,8 @@
         android:layout_width="match_parent"
         android:background="#e2f7c9"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -688,6 +596,5 @@
                 -->
         </LinearLayout>
     </ScrollView>
-
 
 </LinearLayout>
