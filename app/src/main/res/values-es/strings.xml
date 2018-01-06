@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">PIDfromBT</string>
+    <string name="tituloPrincipal">PIDfromBT</string>
+    <string name="actualizarPareados">Actualizar\nvinculados</string>
+    <string name="buscarNuevos">Buscar BT\nnuevos</string>
+    <string name="logoContentDesc">Extended APP\'s logo</string>
+
+    <!--OnBoarding Screen 1-->
+    <string name="bienvenido">Bienvenido!</string>
+    <string name="userNuevo">Parece que eres nuevo aquí.</string>
+    <string name="veamosCosas">Echemos un vistazo a todo lo que puedes hacer.</string>
+
+    <!--OnBoarding Screen 2-->
+    <string name="encontrarVincular">Buscar y vincular!</string>
+    <string name="parPulsaciones">Con solo un par de pulsaciones.</string>
+    <string name="tambienDesemparejar">También puedes desemparejar los dispositivos que no uses con una pulsación larga.</string>
+
+    <!--OnBoarding Screen 3-->
+    <string name="listarConectar">Listar y conectar!</string>
+    <string name="pulsarConfigurar">Con solo un par de pulsaciones ya podrás configurar comodamente tu PID.</string>
+
+    <!--OnBoarding Screen 3-->
+    <string name="configuraTodo">Configúralo todo!</string>
+    <string name="constantesConfig">Desde las tres constantes del PID hasta la velocidad, el ideal sobre la pista e incluso succión si también la tuviese.</string>
+</resources>

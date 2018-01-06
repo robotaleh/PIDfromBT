@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -56,6 +57,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get the shared preferences
+        SharedPreferences preferences = getSharedPreferences("PIDfromBTsettings", MODE_PRIVATE);
+
+// Check if onboarding_complete is false
+        if (!preferences.getBoolean("onboarding_complete", false)) {
+            // Start the onboarding Activity
+            Intent onboarding = new Intent(this, OnboardingActivity.class);
+            startActivity(onboarding);
+
+            // Close the main Activity
+            finish();
+            return;
+        }
+        preferences.edit().putBoolean("onboarding_complete", false).apply();
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -85,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mReceiver);
+        try {
+            unregisterReceiver(mReceiver);
+
+        } catch (IllegalArgumentException e) {
+
+        }
         super.onDestroy();
     }
 
@@ -100,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
     private void assignListeners(ImageView logoMain, ListView listPaired, Button btnListPaired, Button btnSearch) {
         if (logoMain != null) logoMain.setOnLongClickListener(longClickInfo);
         if (listPaired != null) listPaired.setOnItemClickListener(listPairedItemClickListener);
-        if (listPaired != null) listPaired.setOnItemLongClickListener(listPairedItemLongClickListener);
+        if (listPaired != null)
+            listPaired.setOnItemLongClickListener(listPairedItemLongClickListener);
         if (btnListPaired != null) btnListPaired.setOnClickListener(listPairedBTsClickListener);
         if (btnSearch != null) btnSearch.setOnClickListener(searchNewBTDevicesClickListener);
     }
@@ -335,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 // Make an intent to start next activity.
                 Intent i = new Intent(MainActivity.this, PIDManager.class);
                 //Change the activity.
-                if(!DEBUG)
+                if (!DEBUG)
                     i.putExtra("BT_ADDRESS", address);
                 startActivity(i);
             } else {

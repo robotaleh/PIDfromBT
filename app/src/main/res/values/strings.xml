@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">PIDfromBT</string>
     <string name="tituloPrincipal">PIDfromBT</string>
-    <string name="actualizarPareados">Actualizar\nvinculados</string>
-    <string name="buscarNuevos">Buscar nuevos\ndispositivos</string>
-    <string name="logoContentDesc">Logo extendido de la APP</string>
+    <string name="actualizarPareados">Update\npaired</string>
+    <string name="buscarNuevos">Search new\ndevices</string>
+    <string name="logoContentDesc">Extended APP\'s logo</string>
+
+    <!--OnBoarding Screen 1-->
+    <string name="bienvenido">Welcome!</string>
+    <string name="userNuevo">You seem to be a new user.</string>
 </resources>
