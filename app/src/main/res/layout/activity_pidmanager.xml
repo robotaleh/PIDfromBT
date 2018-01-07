@@ -14,56 +14,8 @@
         android:padding="8dp"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="5dp"
-            android:background="#c0ca33"
-            android:visibility="gone">
-            <CheckBox
-                android:id="@+id/autoScroll"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_alignParentEnd="true"
-                android:background="#c0ca33"
-                android:backgroundTint="#c0ca33"
-                android:checked="true"
-                android:text="Autoscroll" />
-
-            <ImageButton
-                android:id="@+id/back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="#c0ca33"
-                android:backgroundTint="#c0ca33"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_navigate_before_black_48dp" />
-
-            <ImageButton
-                android:id="@+id/next"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_toRightOf="@id/back"
-                android:background="#c0ca33"
-                android:backgroundTint="#c0ca33"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_navigate_next_black_48dp" />
-
-            <ImageButton
-                android:id="@+id/clearLog"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_toRightOf="@id/next"
-                android:background="#c0ca33"
-                android:backgroundTint="#c0ca33"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_delete_black_48dp" />
-        </RelativeLayout>
-
             <TextView
-                android:id="@+id/consola"
+                android:id="@+id/console"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#424242"
@@ -96,7 +48,7 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -123,29 +75,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="P"
+                            android:text="@string/firstP"
                             android:textColor="#c62828"
                             android:textSize="30sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="roporcional"
+                            android:text="@string/lastP"
                             android:textColor="#ef5350"
                             android:textSize="20sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtP"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-
                         android:layout_weight="1"
                         android:paddingBottom="3dp"
                         android:text="0.0"
-                        android:textAlignment="viewEnd"
+                        android:textAlignment="textEnd"
                         android:textColor="#ef5350"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -154,43 +107,48 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/upupP"
+                        android:id="@+id/hardUpP"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_upward_black_48dp"
-                        android:backgroundTint="#ef5350"/>
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/upP"
+                        android:id="@+id/softUpP"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
-                        android:backgroundTint="#ef5350"/>
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/downP"
+                        android:id="@+id/softDownP"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
-                        android:backgroundTint="#ef5350"/>
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
+
                     <ImageButton
-                        android:id="@+id/downdownP"
+                        android:id="@+id/hardDownP"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_downward_black_48dp"
-                        android:backgroundTint="#ef5350"/>
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
 
                 </LinearLayout>
 
@@ -199,7 +157,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -217,29 +175,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="I"
+                            android:text="@string/firstI"
                             android:textColor="#00c853"
                             android:textSize="30sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ntegral"
+                            android:text="@string/lastI"
                             android:textColor="#81c784"
                             android:textSize="20sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtI"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-
                         android:layout_weight="1"
                         android:paddingBottom="3dp"
                         android:text="0.0"
-                        android:textAlignment="viewEnd"
+                        android:textAlignment="textEnd"
                         android:textColor="#81c784"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,44 +207,48 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/upupP"
+                        android:id="@+id/hardUpI"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_upward_black_48dp"
-                        android:backgroundTint="#81c784"/>
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/upP"
+                        android:id="@+id/softUpI"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
-                        android:backgroundTint="#81c784"/>
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/downP"
+                        android:id="@+id/softDownI"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
-                        android:backgroundTint="#81c784"/>
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/downdownP"
+                        android:id="@+id/hardDownI"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_downward_black_48dp"
-                        android:backgroundTint="#81c784"/>
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -293,7 +256,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -310,29 +273,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="D"
+                            android:text="@string/firstD"
                             android:textColor="#1565c0"
                             android:textSize="30sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="erivativa"
+                            android:text="@string/lastD"
                             android:textColor="#7986cb"
                             android:textSize="20sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtD"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-
                         android:layout_weight="1"
                         android:paddingBottom="3dp"
                         android:text="0.0"
-                        android:textAlignment="viewEnd"
+                        android:textAlignment="textEnd"
                         android:textColor="#7986cb"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -340,44 +304,48 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/upupP"
+                        android:id="@+id/hardUpD"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_upward_black_48dp"
-                        android:backgroundTint="#7986cb"/>
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/upP"
+                        android:id="@+id/softUpD"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
-                        android:backgroundTint="#7986cb"/>
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/downP"
+                        android:id="@+id/softDownD"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
-                        android:backgroundTint="#7986cb"/>
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
 
                     <ImageButton
-                        android:id="@+id/downdownP"
+                        android:id="@+id/hardDownD"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:onClick="onChangeButton"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_arrow_downward_black_48dp"
-                        android:backgroundTint="#7986cb"/>
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -385,8 +353,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -398,14 +367,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="I"
+                        android:text="@string/firstX"
                         android:textColor="#c628c3"
                         android:textSize="30sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="deal"
+                        android:text="@string/lastX"
                         android:textColor="#ef50e4"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -419,14 +388,15 @@
                     android:paddingBottom="5dp">
 
                     <TextView
-                        android:id="@+id/idealVal"
+                        android:id="@+id/txtX"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="0" />
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
 
                     <SeekBar
-                        android:id="@+id/ideal"
+                        android:id="@+id/seekX"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
@@ -438,8 +408,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -451,14 +422,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="V"
+                        android:text="@string/firstV"
                         android:textColor="#fdd835"
                         android:textSize="30sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="elocidad"
+                        android:text="@string/lastV"
                         android:textColor="#d4e157"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -472,14 +443,15 @@
                     android:paddingBottom="5dp">
 
                     <TextView
-                        android:id="@+id/numVVal"
+                        android:id="@+id/txtV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="0" />
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
 
                     <SeekBar
-                        android:id="@+id/numVsb"
+                        android:id="@+id/seekV"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:max="255"
@@ -490,8 +462,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -503,14 +476,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="S"
+                        android:text="@string/firstS"
                         android:textColor="#35fafd"
                         android:textSize="30sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ucción"
+                        android:text="@string/lastS"
                         android:textColor="#57e1da"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -524,14 +497,15 @@
                     android:paddingBottom="5dp">
 
                     <TextView
-                        android:id="@+id/numSVal"
+                        android:id="@+id/txtS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="0" />
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
 
                     <SeekBar
-                        android:id="@+id/numSsb"
+                        android:id="@+id/seekS"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:max="255"

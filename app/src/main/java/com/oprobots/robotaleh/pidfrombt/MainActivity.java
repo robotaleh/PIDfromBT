@@ -12,20 +12,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Build;
-import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,36 +38,35 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private BluetoothAdapter BTAdapter = null;
     private ListView listPaired;
-    private Set pairedDevices;
-    private ArrayList foundDevices = new ArrayList();
+    private Set<BluetoothDevice> pairedDevices;
+    private ArrayList<String> foundDevices = new ArrayList<String>();
     private final int BLUETOOTH = 0;
     private ProgressDialog findNewBTProgress;
     private final int ACT_PAIRED = 1;
     private final int ACT_SEARCH = 2;
 
 
-    boolean DEBUG = false;
+    boolean DEBUG = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Get the shared preferences
+        PreferenceManager.setDefaultValues(MainActivity.this, R.xml.settings, false);
+        // Obtiene las SharedPreferences
         SharedPreferences preferences = getSharedPreferences("PIDfromBTsettings", MODE_PRIVATE);
-
-// Check if onboarding_complete is false
+        // Comprueba si no se ha completado el onboarding
         if (!preferences.getBoolean("onboarding_complete", false)) {
-            // Start the onboarding Activity
+            // Inicia la Activity onboarding
             Intent onboarding = new Intent(this, OnboardingActivity.class);
             startActivity(onboarding);
-
-            // Close the main Activity
+            // Cierra la MainActivity
             finish();
             return;
         }
-        preferences.edit().putBoolean("onboarding_complete", false).apply();
+        if (DEBUG) preferences.edit().putBoolean("onboarding_complete", false).apply();
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 //        Asignación de los listeners a los controles
         assignListeners(logoMain, listPaired, btnListPaired, btnSearch);
 
-//        Regustra un Receiver para tener control de las acciones del Adaptador BT
+//        Registra un Receiver para tener control de las acciones del Adaptador BT
         IntentFilter filt = new IntentFilter();
         filt.addAction(BluetoothDevice.ACTION_FOUND);
         filt.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -100,11 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        // TryCatch para capturar la excepción cuando se lanza el OnBoarding
         try {
             unregisterReceiver(mReceiver);
-
         } catch (IllegalArgumentException e) {
-
+            Log.e("Exception", e.getMessage());
         }
         super.onDestroy();
     }
@@ -137,13 +133,16 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             if (BTAdapter.isEnabled()) {
-                if (ACT_BT == ACT_PAIRED) {
-                    pairedDevicesList();
-                } else {
-                    searchNewBTDevices();
+                switch (ACT_BT) {
+                    case ACT_PAIRED:
+                        pairedDevicesList();
+                        break;
+                    case ACT_SEARCH:
+                        searchNewBTDevices();
+                        break;
                 }
             } else {
-                //Ask to the user turn the bluetooth on
+                //Pide al usuario que active el Bluetooth
                 Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(turnBTon, BLUETOOTH);
             }
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 BTAdapter.cancelDiscovery();
             }
             pairedDevices = BTAdapter.getBondedDevices();
-            ArrayList list = new ArrayList();
+            ArrayList<String> list = new ArrayList<>();
 
             if (pairedDevices.size() > 0) {
                 for (Object btO : pairedDevices) {
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth Vinculados.", Toast.LENGTH_SHORT).show();
             }
 
-            final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, list);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, list);
             listPaired.setAdapter(adapter);
             listPaired.setOnItemClickListener(listPairedItemClickListener);
             listPaired.setOnItemLongClickListener(listPairedItemLongClickListener);
@@ -189,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         if (foundDevices.size() == 0 && finished) {
             Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth disponibles.", Toast.LENGTH_SHORT).show();
         }
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_selectable_list_item, foundDevices);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, foundDevices);
         listPaired.setAdapter(adapter);
         listPaired.setOnItemClickListener(foundListItemClickListener);
         listPaired.setOnLongClickListener(null);
@@ -278,13 +277,17 @@ public class MainActivity extends AppCompatActivity {
 
                 if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
                     Toast.makeText(MainActivity.this, "Emparejado", Toast.LENGTH_SHORT).show();
+                    if (BTAdapter.isDiscovering()) {
+                        BTAdapter.cancelDiscovery();
+                    }
+                    pairedDevicesList();
                 } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED) {
                     Toast.makeText(MainActivity.this, "Desemparejado", Toast.LENGTH_SHORT).show();
                     if (BTAdapter.isDiscovering()) {
                         BTAdapter.cancelDiscovery();
                     }
+                    pairedDevicesList();
                 }
-                pairedDevicesList();
             }
         }
     };
@@ -350,12 +353,11 @@ public class MainActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener listPairedItemClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView av, View v, int arg2, long arg3) {
             if (BTEnabled()) {
-                // Get the device MAC address, the last 17 chars in the View
+                // Obtén la dirección MAC, los últimos 17 caracteres en la View
                 String info = ((TextView) v).getText().toString();
                 String address = info.substring(info.length() - 17);
-                // Make an intent to start next activity.
+                // Crea un Intent para iniciar la siguiente Activity
                 Intent i = new Intent(MainActivity.this, PIDManager.class);
-                //Change the activity.
                 if (!DEBUG)
                     i.putExtra("BT_ADDRESS", address);
                 startActivity(i);
@@ -371,11 +373,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private AdapterView.OnItemClickListener foundListItemClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView av, View v, int arg2, long arg3) {
-            // Get the device MAC address, the last 17 chars in the View
+            // Obtén la dirección MAC, los últimos 17 caracteres en la View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            System.out.println(address);
             BluetoothDevice device = BTAdapter.getRemoteDevice(address);
             try {
                 Method method = device.getClass().getMethod("createBond", (Class[]) null);

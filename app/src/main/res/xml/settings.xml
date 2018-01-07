@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_gen"
+        android:title="General">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="stopOnShake"
+            android:title="Parada de emergencia"
+            android:summary="Al agitar el dispositivo, se envían valores nulos de PID y velocidad para parar de emergencia al robot"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="hasSuction"
+            android:title="Ventilador de succión"
+            android:summary="Control extra de velocidad del ventilador de succción u otro componente PWM del robot"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_gen"
+        android:title="Intervalos del PID">
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="hardIntervalP"
+            android:title="Proporcional Fuerte"
+            android:summary="Cambio realizado en la Proporcional al pulsar sobre las flechas grandes."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+        <EditTextPreference
+            android:defaultValue="1"
+            android:key="softIntervalP"
+            android:title="Proporcional Suave"
+            android:summary="Cambio realizado en la Proporcional al pulsar sobre las flechas pequeñas."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="hardIntervalI"
+            android:title="Integral Fuerte"
+            android:summary="Cambio realizado en la Integral al pulsar sobre las flechas grandes."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+        <EditTextPreference
+            android:defaultValue="1"
+            android:key="softIntervalI"
+            android:title="Integral Suave"
+            android:summary="Cambio realizado en la Integral al pulsar sobre las flechas pequeñas."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="hardIntervalD"
+            android:title="Derivativa Fuerte"
+            android:summary="Cambio realizado en la Derivativa al pulsar sobre las flechas grandes."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+        <EditTextPreference
+            android:defaultValue="1"
+            android:key="softIntervalD"
+            android:title="Derivativa Suave"
+            android:summary="Cambio realizado en la Derivativa al pulsar sobre las flechas pequeñas."
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:numeric="decimal"
+            android:digits="0123456789."/>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -21,8 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:screenOrientation="portrait" android:name=".PIDManager"></activity>
-        <activity android:name=".OnboardingActivity"
+        <activity
+            android:name=".PIDManager"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OnboardingActivity"
             android:screenOrientation="portrait" />
     </application>
 

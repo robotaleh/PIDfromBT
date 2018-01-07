@@ -1,9 +1,4 @@
 <resources>
-    <string name="app_name">PIDfromBT</string>
-    <string name="tituloPrincipal">PIDfromBT</string>
-    <string name="actualizarPareados">Actualizar\nvinculados</string>
-    <string name="buscarNuevos">Buscar BT\nnuevos</string>
-    <string name="logoContentDesc">Extended APP\'s logo</string>
 
     <!--OnBoarding Screen 1-->
     <string name="bienvenido">Bienvenido!</string>
@@ -22,4 +17,33 @@
     <!--OnBoarding Screen 3-->
     <string name="configuraTodo">Configúralo todo!</string>
     <string name="constantesConfig">Desde las tres constantes del PID hasta la velocidad, el ideal sobre la pista e incluso succión si también la tuviese.</string>
+
+    <!--Pantalla Principal-->
+    <string name="app_name">PIDfromBT</string>
+    <string name="tituloPrincipal">PIDfromBT</string>
+    <string name="actualizarPareados">Actualizar\nvinculados</string>
+    <string name="buscarNuevos">Buscar BT\nnuevos</string>
+    <string name="logoContentDesc">Extended APP\'s logo</string>
+
+    <!--Activity PIDfromBT-->
+    <string name="firstP">P</string>
+    <string name="lastP">roporcional</string>
+    <string name="firstI">I</string>
+    <string name="lastI">ntegral</string>
+    <string name="firstD">D</string>
+    <string name="lastD">erivativa</string>
+    <string name="firstX">I</string>
+    <string name="lastX">deal</string>
+    <string name="firstV">V</string>
+    <string name="lastV">elocidad</string>
+    <string name="firstS">S</string>
+    <string name="lastS">ucción</string>
+
+    <!--Menú-->
+    <string name="toggleRunPlayMenu">Play</string>
+    <string name="toggleRunStopMenu">Stop</string>
+    <string name="loadMenu">Cargar ajustes PID</string>
+    <string name="saveMenu">Guardar ajustes PID</string>
+    <string name="deleteMenu">Eliminar ajustes PID</string>
+    <string name="settingsMenu">Ajustes</string>
 </resources>

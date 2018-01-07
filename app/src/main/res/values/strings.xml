@@ -1,11 +1,48 @@
 <resources>
+    <!--OnBoarding Screen 1-->
+    <string name="bienvenido">Welcome!</string>
+    <string name="userNuevo">You seem to be a new user.</string>
+    <string name="veamosCosas">Let\'s take a look at everything you can do.</string>
+
+    <!--OnBoarding Screen 2-->
+    <string name="encontrarVincular">Search and pair!</string>
+    <string name="parPulsaciones">With only a couple of clicks.</string>
+    <string name="tambienDesemparejar">You can also unpair devices you don\'t use with a long press.</string>
+
+    <!--OnBoarding Screen 3-->
+    <string name="listarConectar">List and connect!</string>
+    <string name="pulsarConfigurar">With just a couple of clicks you can easily configure your PID.</string>
+
+    <!--OnBoarding Screen 3-->
+    <string name="configuraTodo">Configure everything!</string>
+    <string name="constantesConfig">From the three constants of the PID to the speed, the ideal on the track and even suction if it also had it.</string>
+
+    <!--Pantalla Principal-->
     <string name="app_name">PIDfromBT</string>
     <string name="tituloPrincipal">PIDfromBT</string>
     <string name="actualizarPareados">Update\npaired</string>
     <string name="buscarNuevos">Search new\ndevices</string>
     <string name="logoContentDesc">Extended APP\'s logo</string>
 
-    <!--OnBoarding Screen 1-->
-    <string name="bienvenido">Welcome!</string>
-    <string name="userNuevo">You seem to be a new user.</string>
+    <!--Activity PIDfromBT-->
+    <string name="firstP">P</string>
+    <string name="lastP">roportional</string>
+    <string name="firstI">I</string>
+    <string name="lastI">ntegral</string>
+    <string name="firstD">D</string>
+    <string name="lastD">erivative</string>
+    <string name="firstX">P</string>
+    <string name="lastX">osition</string>
+    <string name="firstV">S</string>
+    <string name="lastV">peed</string>
+    <string name="firstS">S</string>
+    <string name="lastS">uction</string>
+
+    <!--Menú-->
+    <string name="toggleRunPlayMenu">Play</string>
+    <string name="toggleRunStopMenu">Stop</string>
+    <string name="loadMenu">Load PID settings</string>
+    <string name="saveMenu">Save PID settings</string>
+    <string name="deleteMenu">Delete PID settings</string>
+    <string name="settingsMenu">Settings</string>
 </resources>
