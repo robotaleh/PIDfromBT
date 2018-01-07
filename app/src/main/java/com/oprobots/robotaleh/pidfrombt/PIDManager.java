@@ -2,23 +2,31 @@ package com.oprobots.robotaleh.pidfrombt;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 
 import static java.lang.Float.parseFloat;
 
@@ -35,9 +43,14 @@ public class PIDManager extends AppCompatActivity {
     private final int HARD_INT = 0;
     private final int SOFT_INT = 1;
 
+
+    private ArrayList<String> configs = new ArrayList<>();
+    private String lastConfig = null;
+
     // Lista de controles principales
     private TextView console, txtP, txtI, txtD, txtX, txtV, txtS;
     private SeekBar seekX, seekV, seekS;
+    private LinearLayout layoutS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +70,7 @@ public class PIDManager extends AppCompatActivity {
         seekV = (SeekBar) findViewById(R.id.seekV);
         seekS = (SeekBar) findViewById(R.id.seekS);
         console.setMovementMethod(new ScrollingMovementMethod());
+        layoutS = (LinearLayout) findViewById(R.id.layoutS);
 
         // Obtener los ajustes
         getSettings();
@@ -67,7 +81,7 @@ public class PIDManager extends AppCompatActivity {
         assignListeners(seekX, seekV, seekS);
     }
 
-    private void assignListeners(SeekBar seekX, SeekBar seekV, SeekBar seekS){
+    private void assignListeners(SeekBar seekX, SeekBar seekV, SeekBar seekS) {
         seekX.setOnSeekBarChangeListener(seekXlistener);
         seekV.setOnSeekBarChangeListener(seekVlistener);
         seekS.setOnSeekBarChangeListener(seekSlistener);
@@ -83,6 +97,11 @@ public class PIDManager extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(PIDManager.this);
         stopOnShake = settings.getBoolean("stopOnShake", true);
         hasSuction = settings.getBoolean("hasSuction", true);
+        if(hasSuction){
+            layoutS.setVisibility(View.VISIBLE);
+        }else{
+            layoutS.setVisibility(View.GONE);
+        }
         String parsingErrors = "";
         try {
             intervals[INT_P][SOFT_INT] = parseFloat(settings.getString("softIntervalP", "1"));
@@ -127,17 +146,24 @@ public class PIDManager extends AppCompatActivity {
 
     }
 
-    private void setInitialValues(){
+    private void setInitialValues() {
         SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
         txtP.setText(sharedPref.getString("txtP", "0.0"));
         txtI.setText(sharedPref.getString("txtI", "0.0"));
         txtD.setText(sharedPref.getString("txtD", "0.0"));
         txtX.setText(sharedPref.getString("txtX", "0"));
-        seekX.setProgress(Integer.parseInt(txtX.getText().toString())+500);
+        seekX.setProgress(Integer.parseInt(txtX.getText().toString()) + 500);
         txtV.setText(sharedPref.getString("txtV", "0"));
         seekV.setProgress(Integer.parseInt(txtV.getText().toString()));
         txtS.setText(sharedPref.getString("txtS", "0"));
         seekS.setProgress(Integer.parseInt(txtS.getText().toString()));
+
+        // Lista de nombres de configuraciones guardadas
+        String[] names = sharedPref.getString("configs", "").split(";");
+        for (String name : names) {
+            if (!name.equals(""))
+                configs.add(name);
+        }
     }
 
     public void onChangeButton(View view) {
@@ -210,7 +236,8 @@ public class PIDManager extends AppCompatActivity {
         if (txt != null) {
             float anterior = Float.parseFloat(txt.getText().toString());
             txt.setText(String.valueOf(round(anterior + val, 3)));
-            saveSharedPrefs("txt"+String.valueOf(type), txt.getText().toString());
+            lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
+            saveSharedPrefs("txt" + String.valueOf(type), txt.getText().toString());
         }
 
     }
@@ -218,7 +245,7 @@ public class PIDManager extends AppCompatActivity {
     private SeekBar.OnSeekBarChangeListener seekXlistener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            txtX.setText(String.valueOf(progress-500));
+            txtX.setText(String.valueOf(progress - 500));
         }
 
         @Override
@@ -228,11 +255,12 @@ public class PIDManager extends AppCompatActivity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            int val= (int)(Math.rint((double) seekBar.getProgress() / 10) * 10);
-            if(Math.abs(val) > (float)(seekBar.getMax()))return;
+            int val = (int) (Math.rint((double) seekBar.getProgress() / 10) * 10);
+            if (Math.abs(val) > (float) (seekBar.getMax())) return;
             seekBar.setProgress(val);
-            txtX.setText(String.valueOf(val-500));
+            txtX.setText(String.valueOf(val - 500));
             saveSharedPrefs("txtX", txtX.getText().toString());
+            lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
     };
 
@@ -249,11 +277,12 @@ public class PIDManager extends AppCompatActivity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            int val= (int)(Math.rint((double) seekBar.getProgress() / 10) * 10);
-            if(val > seekBar.getMax())return;
+            int val = (int) (Math.rint((double) seekBar.getProgress() / 10) * 10);
+            if (val > seekBar.getMax()) return;
             seekBar.setProgress(val);
             txtV.setText(String.valueOf(val));
             saveSharedPrefs("txtV", txtV.getText().toString());
+            lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
     };
 
@@ -270,11 +299,12 @@ public class PIDManager extends AppCompatActivity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            int val= (int)(Math.rint((double) seekBar.getProgress() / 10) * 10);
-            if(val > seekBar.getMax())return;
+            int val = (int) (Math.rint((double) seekBar.getProgress() / 10) * 10);
+            if (val > seekBar.getMax()) return;
             seekBar.setProgress(val);
             txtS.setText(String.valueOf(val));
             saveSharedPrefs("txtS", txtS.getText().toString());
+            lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
     };
 
@@ -296,7 +326,15 @@ public class PIDManager extends AppCompatActivity {
                 }
                 break;
 
-
+            case R.id.load:
+                loadCurrentConfig();
+                break;
+            case R.id.save:
+                saveCurrentConfig();
+                break;
+            case R.id.delete:
+                deleteConfig();
+                break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
@@ -304,11 +342,166 @@ public class PIDManager extends AppCompatActivity {
         return true;
     }
 
-    private void saveSharedPrefs(String key, String value){
+    private void saveSharedPrefs(String key, String value) {
         SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
         editor.apply();
+    }
+
+    private void loadCurrentConfig() {
+        if (configs.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "No hay configuraciones para cargar.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AlertDialog.Builder builderLoad = new AlertDialog.Builder(PIDManager.this);
+        builderLoad.setIcon(R.drawable.logo_opr);
+        builderLoad.setTitle("Seleccione la configuración que desea cargar");
+        int selectedIndex = -1;
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(PIDManager.this, android.R.layout.simple_list_item_single_choice);
+//                arrayAdapter.add("Hardik");
+        for (int i = 0; i < configs.size(); i++) {
+            arrayAdapter.add(configs.get(i));
+            if (configs.get(i).equals(lastConfig)) {
+                selectedIndex = i;
+            }
+        }
+
+        builderLoad.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderLoad.setSingleChoiceItems(arrayAdapter, selectedIndex, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                String config = arrayAdapter.getItem(which);
+                lastConfig = config;
+                SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
+                String pidv = sharedPref.getString(config, "");
+                if (!pidv.equals("")) {
+                    String[] pidvARR = pidv.split(";");
+                    txtP.setText(pidvARR[0]);
+                    txtI.setText(pidvARR[1]);
+                    txtD.setText(pidvARR[2]);
+                    txtV.setText(pidvARR[3]);
+                    seekV.setProgress(Integer.parseInt(pidvARR[3]));
+                    txtX.setText(pidvARR[4]);
+                    seekX.setProgress(Integer.parseInt(pidvARR[4]) + 500);
+                    txtS.setText(pidvARR[5]);
+                    seekS.setProgress(Integer.parseInt(pidvARR[5]));
+
+//                    if (run)
+//                        enviarPIDV();
+                    SharedPreferences sharedPrefSave = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPrefSave.edit();
+                    editor.putString("txtP", txtP.getText().toString());
+                    editor.putString("txtI", txtI.getText().toString());
+                    editor.putString("txtD", txtD.getText().toString());
+                    editor.putString("txtV", txtV.getText().toString());
+                    editor.putString("txtX", txtX.getText().toString());
+                    editor.putString("txtS", txtS.getText().toString());
+                    editor.apply();
+
+
+                    final Handler handlerP = new Handler();
+                    handlerP.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                        }
+                    }, 200);
+                } else {
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "No se han podido recuperar los datos guardados.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        });
+        builderLoad.show();
+    }
+
+    private void saveCurrentConfig() {
+        final EditText editName = new EditText(getApplicationContext());
+        editName.setInputType(InputType.TYPE_CLASS_TEXT);
+        editName.setTextColor(getResources().getColor(R.color.black));
+        editName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Nombre")
+                .setIcon(R.drawable.logo_opr)
+                .setMessage("Indique el nombre de la configuración que desea guardar.")
+                .setView(editName)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String name = editName.getText().toString();
+                        if (!configs.contains(name)) {
+                            if (!name.equals("") && !name.contains(";")) {
+                                SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                // Guarda todos los ajustes separados por ';'
+                                editor.putString(name, txtP.getText().toString() + ";" + txtI.getText().toString() + ";" + txtD.getText().toString() + ";" + String.valueOf(seekV.getProgress()) + ";" + String.valueOf(seekX.getProgress() - 500) + ";" + String.valueOf(seekS.getProgress()));
+                                // Guarda una lista de todos los nombres de configuraciones para recuperarlos más tarde
+                                editor.putString("configs", sharedPref.getString("configs", "") + (((sharedPref.getString("configs", "")).equals("")) ? name : (";" + name)));
+                                configs.add(name);
+                                lastConfig = name;
+                                editor.apply();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "El nombre no puede estar en blanco, ni contener ';'.\nInténtelo de nuevo.", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "El nombre ya se encuentra asignado a otra configuración.\nInténtelo de nuevo con otro nombre.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .show();
+    }
+
+    private void deleteConfig() {
+        if (configs.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "No hay configuraciones para borrar.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AlertDialog.Builder builderDelete = new AlertDialog.Builder(PIDManager.this);
+        builderDelete.setIcon(R.drawable.logo_opr);
+        builderDelete.setTitle("Seleccione la configuración que desea eliminar");
+
+        final ArrayAdapter<String> arrayAdapterDel = new ArrayAdapter<>(PIDManager.this, android.R.layout.simple_list_item_single_choice);
+        for (int i = 0; i < configs.size(); i++) {
+            arrayAdapterDel.add(configs.get(i));
+        }
+
+        builderDelete.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderDelete.setAdapter(arrayAdapterDel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String config = arrayAdapterDel.getItem(which);
+                SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.remove(config);
+                editor.remove("configs");
+                configs.remove(config);
+                String configsString = "";
+                for (int i = 0; i < configs.size(); i++) {
+                    configsString += ((i > 0) ? "" : ";") + configs.get(i);
+                }
+                editor.putString("configs", configsString);
+                editor.apply();
+            }
+        });
+        builderDelete.show();
     }
 
     public float round(double value, int places) {
