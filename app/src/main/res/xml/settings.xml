@@ -13,6 +13,13 @@
             android:key="hasSuction"
             android:title="Ventilador de succión"
             android:summary="Control extra de velocidad del ventilador de succción u otro componente PWM del robot"/>
+        <ListPreference
+            android:defaultValue="150"
+            android:key="maxCommandHistory"
+            android:title="Historial de comandos"
+            android:summary="Determina el número máximo de líneas de acción que se guardarán en la consola de resumen"
+            android:entries="@array/maxCommandHistoryArray"
+            android:entryValues="@array/maxCommandHistoryArray" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_gen"
