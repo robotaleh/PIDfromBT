@@ -134,7 +134,7 @@ public class PIDManager extends AppCompatActivity {
 
                 if (get != null)
                     Toast.makeText(getBaseContext(), "Conexión finalizada.", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
             finish(); //return to the first layout }
         }
@@ -219,7 +219,7 @@ public class PIDManager extends AppCompatActivity {
         address = intBT.getStringExtra("BT_ADDRESS");
         if (address != null) {
             if (bt == null) {
-                bt = new ConnectBT(PIDManager.this);
+                bt = new ConnectBT();
                 bt.execute();
             }
         }
@@ -307,7 +307,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtX.setText(String.valueOf(progress - 500));
-            if (run)
+            if (run && fromUser)
                 manageSend("X" + (txtX.getText().toString()));
         }
 
@@ -333,7 +333,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtV.setText(String.valueOf(progress));
-            if (run)
+            if (run && fromUser)
                 manageSend("V" + (txtV.getText().toString()));
         }
 
@@ -359,7 +359,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtS.setText(String.valueOf(progress));
-            if (run)
+            if (run && fromUser)
                 manageSend("S" + (txtS.getText().toString()));
         }
 
@@ -589,10 +589,8 @@ public class PIDManager extends AppCompatActivity {
     private class ConnectBT extends AsyncTask<Void, Void, Void> {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
 
-        private PIDManager activity;
+        private ConnectBT() {
 
-        private ConnectBT(PIDManager activity) {
-            this.activity = activity;
         }
 
         @Override
@@ -629,7 +627,7 @@ public class PIDManager extends AppCompatActivity {
                 msg("Conectado.");
                 isBTConnected = true;
                 try {
-                    get = new GetMsg(activity);
+                    get = new GetMsg();
                     get.execute(BTSocket.getInputStream());
                 } catch (IOException e) {
                     msg("ERROR: " + e.getMessage());
@@ -655,10 +653,8 @@ public class PIDManager extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class GetMsg extends AsyncTask<InputStream, String, Boolean> {
 
-        private PIDManager activity;
 
-        private GetMsg(PIDManager activity) {
-            this.activity = activity;
+        private GetMsg(){
         }
 
         byte[] readBuffer = new byte[1024];
