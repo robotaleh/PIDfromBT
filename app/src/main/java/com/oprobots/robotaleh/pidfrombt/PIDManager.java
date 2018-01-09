@@ -15,13 +15,18 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,16 +109,20 @@ public class PIDManager extends AppCompatActivity {
         setInitialValues();
 
         // Asigna los Listeners a los elementos
-        assignListeners(seekX, seekV, seekS);
+        assignListeners(seekX, seekV, seekS, txtP, txtI, txtD);
 
         // Inicia la conexión
         initBT();
     }
 
-    private void assignListeners(SeekBar seekX, SeekBar seekV, SeekBar seekS) {
+    private void assignListeners(SeekBar seekX, SeekBar seekV, SeekBar seekS, TextView txtP, TextView txtI, TextView txtD) {
         seekX.setOnSeekBarChangeListener(seekXlistener);
         seekV.setOnSeekBarChangeListener(seekVlistener);
         seekS.setOnSeekBarChangeListener(seekSlistener);
+
+        txtP.setOnClickListener(txtClickListener);
+        txtI.setOnClickListener(txtClickListener);
+        txtD.setOnClickListener(txtClickListener);
     }
 
     @Override
@@ -196,9 +205,9 @@ public class PIDManager extends AppCompatActivity {
 
     private void setInitialValues() {
         SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
-        txtP.setText(sharedPref.getString("txtP", "0.0"));
-        txtI.setText(sharedPref.getString("txtI", "0.0"));
-        txtD.setText(sharedPref.getString("txtD", "0.0"));
+        txtP.setText(sharedPref.getString("txtP", "0"));
+        txtI.setText(sharedPref.getString("txtI", "0"));
+        txtD.setText(sharedPref.getString("txtD", "0"));
         txtX.setText(sharedPref.getString("txtX", "0"));
         seekX.setProgress(Integer.parseInt(txtX.getText().toString()) + 500);
         txtV.setText(sharedPref.getString("txtV", "0"));
@@ -378,6 +387,103 @@ public class PIDManager extends AppCompatActivity {
                 manageSend("S" + (txtS.getText().toString()));
             saveSharedPrefs("txtS", txtS.getText().toString());
             lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
+        }
+    };
+
+    TextView.OnClickListener txtClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(final View txt) {
+            final AlertDialog.Builder builderTxtValue = new AlertDialog.Builder(PIDManager.this);
+
+            builderTxtValue.setIcon(R.drawable.logo_opr);
+            char type = ' ';
+            switch (txt.getId()){
+                case R.id.txtP:
+                    type = 'P';
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#c62828'>P</font><font color='#ef5350'>roporcional:</font>"));
+                    break;
+                case R.id.txtI:
+                    type = 'I';
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#00c853'>I</font><font color='#81c784'>ntegral:</font>"));
+                    break;
+                case R.id.txtD:
+                    type = 'D';
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#1565c0'>D</font><font color='#7986cb'>erivativa:</font>"));
+                    break;
+            }
+            final char typeFinal = type;
+
+            final EditText input = new EditText(PIDManager.this);
+            input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            input.setKeyListener(DigitsKeyListener.getInstance("0123456789.-"));
+            builderTxtValue.setView(input);
+            input.setText(((TextView)txt).getText());
+            input.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+
+            builderTxtValue.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try{
+                        float val = parseFloat(input.getText().toString());
+                        ((TextView)txt).setText(String.valueOf(round(val, 3)));
+                        if (run)
+                            manageSend(String.valueOf(typeFinal) + (((TextView)txt).getText().toString()));
+                    }catch(NumberFormatException e){
+                        Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            builderTxtValue.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+
+//            builderTxtValue.show();
+            final AlertDialog dialog = builderTxtValue.create();
+            input.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN)
+                    {
+                        Log.i("KEY", String.valueOf(keyCode));
+                        switch (keyCode)
+                        {
+                            case KeyEvent.KEYCODE_ENTER:
+                            case KeyEvent.KEYCODE_DPAD_CENTER:
+                                try{
+                                    float val = parseFloat(input.getText().toString());
+                                    ((TextView)txt).setText(String.valueOf(round(val, 3)));
+                                    if (run)
+                                        manageSend(String.valueOf(typeFinal) + (((TextView)txt).getText().toString()));
+                                }catch(NumberFormatException e){
+                                    Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                                return true;
+                            default:
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
+            dialog.show();
+            input.requestFocus();
+            input.selectAll();
+            input.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    InputMethodManager keyboard = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (keyboard != null) {
+                        keyboard.showSoftInput(input, 0);
+                    }
+                }
+            },200);
         }
     };
 
@@ -654,11 +760,12 @@ public class PIDManager extends AppCompatActivity {
     private class GetMsg extends AsyncTask<InputStream, String, Boolean> {
 
 
-        private GetMsg(){
+        private GetMsg() {
         }
 
         byte[] readBuffer = new byte[1024];
-        int readBufferPosition =0;
+        int readBufferPosition = 0;
+
         @Override
         protected Boolean doInBackground(InputStream... btSocket) {
 
@@ -667,24 +774,19 @@ public class PIDManager extends AppCompatActivity {
                 InputStream inputStream = btSocket[0];
                 try {
                     int bytesAvailable = inputStream.available();
-                    if(bytesAvailable > 0)
-                    {
+                    if (bytesAvailable > 0) {
                         byte[] packetBytes = new byte[bytesAvailable];
                         inputStream.read(packetBytes);
-                        for(int i=0;i<bytesAvailable;i++)
-                        {
+                        for (int i = 0; i < bytesAvailable; i++) {
                             byte b = packetBytes[i];
-                            if(b == 10)
-                            {
+                            if (b == 10) {
                                 byte[] encodedBytes = new byte[readBufferPosition];
                                 System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
                                 final String data = new String(encodedBytes, "US-ASCII");
                                 readBufferPosition = 0;
 
                                 manageReceive(data);
-                            }
-                            else
-                            {
+                            } else {
                                 readBuffer[readBufferPosition++] = b;
                             }
                         }
@@ -720,8 +822,8 @@ public class PIDManager extends AppCompatActivity {
     private void manageReceive(String msg) {
         msg = Normalizer.normalize(msg, Normalizer.Form.NFC);
         Log.e("Receive", msg);
-        if(commandHistory.size()>=maxCommandHistory){
-            for (int i=0;i<=commandHistory.size()-maxCommandHistory;i++){
+        if (commandHistory.size() >= maxCommandHistory) {
+            for (int i = 0; i <= commandHistory.size() - maxCommandHistory; i++) {
                 commandHistory.remove(i);
             }
         }
@@ -730,9 +832,9 @@ public class PIDManager extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
-                try{
+                try {
                     console.setText(TextUtils.join("\n", commandHistory));
-                }catch (ConcurrentModificationException ignored){
+                } catch (ConcurrentModificationException ignored) {
 
                 }
             }
@@ -741,6 +843,7 @@ public class PIDManager extends AppCompatActivity {
 
     public void manageSend(String msg) {
         Log.e("Send", msg);
+        if(BTSocket==null)return;
         try {
             BTSocket.getOutputStream().write(msg.getBytes());
         } catch (IOException e) {
