@@ -307,7 +307,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtX.setText(String.valueOf(progress - 500));
-            if (run)
+            if (run && fromUser)
                 manageSend("X" + (txtX.getText().toString()));
         }
 
@@ -333,7 +333,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtV.setText(String.valueOf(progress));
-            if (run)
+            if (run && fromUser)
                 manageSend("V" + (txtV.getText().toString()));
         }
 
@@ -359,7 +359,7 @@ public class PIDManager extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             txtS.setText(String.valueOf(progress));
-            if (run)
+            if (run && fromUser)
                 manageSend("S" + (txtS.getText().toString()));
         }
 
