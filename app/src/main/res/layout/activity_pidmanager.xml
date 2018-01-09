@@ -32,7 +32,9 @@
                 android:textColor="#fff"
                 android:textSize="15sp"
                 android:scrollbars = "vertical"
-                android:gravity="bottom"/>
+                android:gravity="bottom"
+                android:scrollbarThumbVertical="@xml/custom_scrollbar"
+                android:fadeScrollbars="false"/>
 
     </LinearLayout>
 
