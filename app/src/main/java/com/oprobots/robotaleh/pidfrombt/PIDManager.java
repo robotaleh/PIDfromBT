@@ -1,6 +1,7 @@
 package com.oprobots.robotaleh.pidfrombt;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,12 +10,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -25,21 +28,16 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.Normalizer;
@@ -73,14 +71,20 @@ public class PIDManager extends AppCompatActivity {
     private final int HARD_INT = 0;
     private final int SOFT_INT = 1;
 
-
     private ArrayList<String> configs = new ArrayList<>();
     private String lastConfig = null;
+
+    // ShakeDetector
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private ShakeDetector shakeDetector;
+    private boolean isCalibrating;
 
     // Lista de controles principales
     private TextView console, txtP, txtI, txtD, txtX, txtV, txtS;
     private SeekBar seekX, seekV, seekS;
     private LinearLayout layoutS;
+    private float shakeThresholdGravity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,9 @@ public class PIDManager extends AppCompatActivity {
 
         // Inicia la conexión
         initBT();
+
+        // Inicia el detector de movimiento
+        initShakeDetector();
     }
 
     private void assignListeners(SeekBar seekX, SeekBar seekV, SeekBar seekS, TextView txtP, TextView txtI, TextView txtD) {
@@ -128,7 +135,14 @@ public class PIDManager extends AppCompatActivity {
     @Override
     protected void onResume() {
         getSettings();
+        sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        sensorManager.unregisterListener(shakeDetector);
+        super.onPause();
     }
 
     @Override
@@ -147,6 +161,7 @@ public class PIDManager extends AppCompatActivity {
             }
             finish(); //return to the first layout }
         }
+        sensorManager.unregisterListener(shakeDetector);
     }
 
     private void getSettings() {
@@ -201,6 +216,7 @@ public class PIDManager extends AppCompatActivity {
             Toast.makeText(PIDManager.this, parsingErrors, Toast.LENGTH_LONG).show();
         }
 
+
     }
 
     private void setInitialValues() {
@@ -221,6 +237,7 @@ public class PIDManager extends AppCompatActivity {
             if (!name.equals(""))
                 configs.add(name);
         }
+        shakeThresholdGravity = sharedPref.getFloat("shakeThresholdGravity", 1.5f);
     }
 
     private void initBT() {
@@ -232,6 +249,27 @@ public class PIDManager extends AppCompatActivity {
                 bt.execute();
             }
         }
+    }
+
+    private void initShakeDetector() {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager == null) {
+            Toast.makeText(PIDManager.this, "No se ha podido acceder al mánager de sensores.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        shakeDetector = new ShakeDetector();
+        shakeDetector.setShakeThresholdGravity(shakeThresholdGravity);
+        shakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+            @Override
+            public void onShake(int count) {
+                if (stopOnShake && !isCalibrating) {
+                    emergecyStop();
+                }
+            }
+        });
+        sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     public void onChangeButton(View view) {
@@ -397,7 +435,7 @@ public class PIDManager extends AppCompatActivity {
 
             builderTxtValue.setIcon(R.drawable.logo_opr);
             char type = ' ';
-            switch (txt.getId()){
+            switch (txt.getId()) {
                 case R.id.txtP:
                     type = 'P';
                     builderTxtValue.setTitle(Html.fromHtml("<font color='#c62828'>P</font><font color='#ef5350'>roporcional:</font>"));
@@ -417,19 +455,19 @@ public class PIDManager extends AppCompatActivity {
             input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
             input.setKeyListener(DigitsKeyListener.getInstance("0123456789.-"));
             builderTxtValue.setView(input);
-            input.setText(((TextView)txt).getText());
+            input.setText(((TextView) txt).getText());
             input.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
 
             builderTxtValue.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    try{
+                    try {
                         float val = parseFloat(input.getText().toString());
-                        ((TextView)txt).setText(String.valueOf(round(val, 3)));
+                        ((TextView) txt).setText(String.valueOf(round(val, 3)));
                         if (run)
-                            manageSend(String.valueOf(typeFinal) + (((TextView)txt).getText().toString()));
-                    }catch(NumberFormatException e){
+                            manageSend(String.valueOf(typeFinal) + (((TextView) txt).getText().toString()));
+                    } catch (NumberFormatException e) {
                         Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -447,19 +485,17 @@ public class PIDManager extends AppCompatActivity {
             input.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN)
-                    {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         Log.i("KEY", String.valueOf(keyCode));
-                        switch (keyCode)
-                        {
+                        switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
                             case KeyEvent.KEYCODE_DPAD_CENTER:
-                                try{
+                                try {
                                     float val = parseFloat(input.getText().toString());
-                                    ((TextView)txt).setText(String.valueOf(round(val, 3)));
+                                    ((TextView) txt).setText(String.valueOf(round(val, 3)));
                                     if (run)
-                                        manageSend(String.valueOf(typeFinal) + (((TextView)txt).getText().toString()));
-                                }catch(NumberFormatException e){
+                                        manageSend(String.valueOf(typeFinal) + (((TextView) txt).getText().toString()));
+                                } catch (NumberFormatException e) {
                                     Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
                                 }
                                 dialog.dismiss();
@@ -478,12 +514,12 @@ public class PIDManager extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    InputMethodManager keyboard = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (keyboard != null) {
                         keyboard.showSoftInput(input, 0);
                     }
                 }
-            },200);
+            }, 200);
         }
     };
 
@@ -514,6 +550,11 @@ public class PIDManager extends AppCompatActivity {
             case R.id.delete:
                 deleteConfig();
                 break;
+            case R.id.calibrateThreshold:
+                isCalibrating = true;
+//                calibrateThreshold();
+                new CalibrateThreshold().execute();
+                break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
@@ -525,6 +566,13 @@ public class PIDManager extends AppCompatActivity {
         SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
+        editor.apply();
+    }
+
+    private void saveSharedPrefs(String key, Float value) {
+        SharedPreferences sharedPref = PIDManager.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putFloat(key, value);
         editor.apply();
     }
 
@@ -819,6 +867,61 @@ public class PIDManager extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    class CalibrateThreshold extends AsyncTask<Void, Void, Float>{
+
+        ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(PIDManager.this);
+            progress.setTitle("Agite el teléfono para calibrarlo");
+            progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progress.setMax(1000);
+            progress.setCancelable(false);
+            progress.setProgress(0);
+            progress.setProgressNumberFormat(null);
+            isCalibrating = true;
+            progress.show();
+        }
+
+
+        @Override
+        protected Float doInBackground(Void... arg0) {
+            float maxGForce = 1.3f;
+            for (int i = 0; i < progress.getMax(); i ++) {
+                try {
+                    Thread.sleep(1);
+                    progress.incrementProgressBy(1);
+                    float gForce = shakeDetector.gForce;
+                    if(gForce>maxGForce){
+                        maxGForce = gForce;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return maxGForce;
+        }
+
+
+        @Override
+        protected void onPostExecute(Float result) {
+            super.onPostExecute(result);
+            Log.i("gForce", String.valueOf(result));
+            shakeThresholdGravity = round(result, 2);
+            shakeDetector.setShakeThresholdGravity(shakeThresholdGravity);
+            saveSharedPrefs("shakeThresholdGravity", shakeThresholdGravity);
+            progress.dismiss();
+            isCalibrating = false;
+        }
+    }
+
+    private void emergecyStop() {
+        Toast.makeText(PIDManager.this, "shake", Toast.LENGTH_SHORT).show();
+    }
+
     private void manageReceive(String msg) {
         msg = Normalizer.normalize(msg, Normalizer.Form.NFC);
         Log.e("Receive", msg);
@@ -843,7 +946,7 @@ public class PIDManager extends AppCompatActivity {
 
     public void manageSend(String msg) {
         Log.e("Send", msg);
-        if(BTSocket==null)return;
+        if (BTSocket == null) return;
         try {
             BTSocket.getOutputStream().write(msg.getBytes());
         } catch (IOException e) {
