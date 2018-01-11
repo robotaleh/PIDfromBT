@@ -1,7 +1,6 @@
 package com.oprobots.robotaleh.pidfrombt;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

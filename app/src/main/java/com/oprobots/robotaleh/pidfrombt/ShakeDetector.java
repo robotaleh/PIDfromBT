@@ -20,7 +20,7 @@ public class ShakeDetector implements SensorEventListener {
     private int mShakeCount;
     float gForce;
 
-    public void setOnShakeListener(OnShakeListener listener) {
+    void setOnShakeListener(OnShakeListener listener) {
         this.mListener = listener;
     }
 
@@ -67,7 +67,7 @@ public class ShakeDetector implements SensorEventListener {
         }
     }
 
-    public void setShakeThresholdGravity(float shakeThresholdGravity){
+    void setShakeThresholdGravity(float shakeThresholdGravity){
         this.SHAKE_THRESHOLD_GRAVITY = shakeThresholdGravity;
     }
 }
