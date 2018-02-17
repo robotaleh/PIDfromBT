@@ -23,6 +23,8 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +38,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 
+import mehdi.sakout.aboutpage.AboutPage;
+
 public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter BTAdapter = null;
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private final int ACT_SEARCH = 2;
 
 
-    boolean DEBUG = true;
+    boolean DEBUG = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +109,23 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.aboutUs:
+                Intent about_activity = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(about_activity);
+                break;
+        }
+        return true;
+    }
+
     /**
      * Asigna los listeners de las acciones principales
      *
@@ -129,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
         if (BTAdapter == null) {
             //Muestra un mensaje de que el dispositivo no tiene BT y finaliza la aplicación
-            Toast.makeText(getApplicationContext(), "Dispositivo Bluetooth no disponible.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.BtDeviceNotAvailable), Toast.LENGTH_SHORT).show();
             finish();
         } else {
             if (BTAdapter.isEnabled()) {
@@ -166,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth Vinculados.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.pairedBtNotFound), Toast.LENGTH_SHORT).show();
             }
 
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, list);
@@ -186,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     private void foundDevicesList(boolean finished) {
 
         if (foundDevices.size() == 0 && finished) {
-            Toast.makeText(getApplicationContext(), "No se han encontrado Dispositivos Bluetooth disponibles.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.newBtDevicesNotAvailable), Toast.LENGTH_SHORT).show();
         }
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, foundDevices);
         listPaired.setAdapter(adapter);
@@ -208,16 +229,15 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {  // Only ask for these permissions on runtime when running Android 6.0 or higher
                 switch (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     case PackageManager.PERMISSION_DENIED:
-                        final SpannableString permissionLink = new SpannableString("Para encontrar dispositivos BT cercanos pulse \"Permitir\" en el siguiente cuadro de diálogo y pruebe de nuevo.\n\n" +
-                                "Para más información:  http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-hardware-id");
+                        final SpannableString permissionLink = new SpannableString(getString(R.string.newBtPermissionWarning)+"\n\n" + getString(R.string.newBtPermissionWarningInfo)+ " http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-hardware-id");
                         Linkify.addLinks(permissionLink, Linkify.WEB_URLS);
                         final int REQUEST_ACCESS_COARSE_LOCATION = 1;
                         ((TextView) new AlertDialog.Builder(this)
                                 .setIcon(R.drawable.logo_opr)
                                 .setCancelable(false)
-                                .setTitle("Permisos en tiempo de ejecución.")
+                                .setTitle(getString(R.string.newBtPermissionWarningTitle))
                                 .setMessage(permissionLink)
-                                .setPositiveButton("Entiendo", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.understandDialog), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -265,10 +285,10 @@ public class MainActivity extends AppCompatActivity {
                 foundDevices.clear();
                 foundDevicesList(false);
                 findNewBTProgress = new ProgressDialog(MainActivity.this);
-                findNewBTProgress.setTitle("Buscando Dispositivos Bluetooth");
+                findNewBTProgress.setTitle(getString(R.string.searchingBtTitle));
                 findNewBTProgress.setIcon(R.drawable.logo_opr);
                 findNewBTProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                findNewBTProgress.setMessage("Espere hasta que el proceso finalice...");
+                findNewBTProgress.setMessage(getString(R.string.searchingBtDesc));
                 findNewBTProgress.setCancelable(false);
                 findNewBTProgress.show();
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
@@ -276,13 +296,13 @@ public class MainActivity extends AppCompatActivity {
                 final int prevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
 
                 if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
-                    Toast.makeText(MainActivity.this, "Emparejado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.BtPaired), Toast.LENGTH_SHORT).show();
                     if (BTAdapter.isDiscovering()) {
                         BTAdapter.cancelDiscovery();
                     }
                     pairedDevicesList();
                 } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED) {
-                    Toast.makeText(MainActivity.this, "Desemparejado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.BtUnpaired), Toast.LENGTH_SHORT).show();
                     if (BTAdapter.isDiscovering()) {
                         BTAdapter.cancelDiscovery();
                     }
@@ -308,9 +328,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnLongClickListener longClickInfo = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            final SpannableString gitLink = new SpannableString("Es un proyecto Open-Source de OPRobots principalmente orientado a la calibración del PID " +
-                    "en robots siguelíneas o similares, aunque también se puede emplear en cualquier proyecto que " +
-                    "haga uso de dicho algoritmo.\n\nDesarrollado por Alex Santos (@robotaleh).\n" + "http://github.com/robotaleh/PIDfromBT");
+            final SpannableString gitLink = new SpannableString(getString(R.string.aboutPIDfromBT)+"\n\n"+ getString(R.string.developedBy) + "\nhttp://github.com/robotaleh/PIDfromBT");
             Linkify.addLinks(gitLink, Linkify.WEB_URLS);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();

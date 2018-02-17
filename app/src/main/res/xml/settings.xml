@@ -6,18 +6,18 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="stopOnShake"
-            android:title="Parada de emergencia"
-            android:summary="Al agitar el dispositivo, se envían valores nulos de PID y velocidad para parar de emergencia al robot"/>
+            android:title="@string/stopOnShakeTitle"
+            android:summary="@string/stopOnShakeSummary"/>
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="hasSuction"
-            android:title="Ventilador de succión"
-            android:summary="Control extra de velocidad del ventilador de succción u otro componente PWM del robot"/>
+            android:title="@string/hasSuctionTitle"
+            android:summary="@string/hasSuctionSummary"/>
         <ListPreference
             android:defaultValue="150"
             android:key="maxCommandHistory"
-            android:title="Historial de comandos"
-            android:summary="Determina el número máximo de líneas de acción que se guardarán en la consola de resumen"
+            android:title="@string/maxCommandHistoryTitle"
+            android:summary="@string/maxCommandHistorySummary"
             android:entries="@array/maxCommandHistoryArray"
             android:entryValues="@array/maxCommandHistoryArray" />
     </PreferenceCategory>
@@ -27,8 +27,8 @@
         <EditTextPreference
             android:defaultValue="5"
             android:key="hardIntervalP"
-            android:title="Proporcional Fuerte"
-            android:summary="Cambio realizado en la Proporcional al pulsar sobre las flechas grandes."
+            android:title="@string/hardIntervalPTitle"
+            android:summary="@string/softIntervalPSummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
@@ -37,8 +37,8 @@
         <EditTextPreference
             android:defaultValue="1"
             android:key="softIntervalP"
-            android:title="Proporcional Suave"
-            android:summary="Cambio realizado en la Proporcional al pulsar sobre las flechas pequeñas."
+            android:title="@string/softIntervalPTitle"
+            android:summary="@string/softIntervalPSummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
@@ -47,8 +47,8 @@
         <EditTextPreference
             android:defaultValue="5"
             android:key="hardIntervalI"
-            android:title="Integral Fuerte"
-            android:summary="Cambio realizado en la Integral al pulsar sobre las flechas grandes."
+            android:title="@string/hardIntervalITitle"
+            android:summary="@string/hardIntervalISummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
@@ -57,8 +57,8 @@
         <EditTextPreference
             android:defaultValue="1"
             android:key="softIntervalI"
-            android:title="Integral Suave"
-            android:summary="Cambio realizado en la Integral al pulsar sobre las flechas pequeñas."
+            android:title="@string/softIntervalITitle"
+            android:summary="@string/softIntervalISummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
@@ -67,8 +67,8 @@
         <EditTextPreference
             android:defaultValue="5"
             android:key="hardIntervalD"
-            android:title="Derivativa Fuerte"
-            android:summary="Cambio realizado en la Derivativa al pulsar sobre las flechas grandes."
+            android:title="@string/hardIntervalDTitle"
+            android:summary="@string/hardIntervalDSummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"
@@ -77,8 +77,8 @@
         <EditTextPreference
             android:defaultValue="1"
             android:key="softIntervalD"
-            android:title="Derivativa Suave"
-            android:summary="Cambio realizado en la Derivativa al pulsar sobre las flechas pequeñas."
+            android:title="@string/softIntervalDTitle"
+            android:summary="@string/softIntervalDSummary"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:inputType="numberDecimal"

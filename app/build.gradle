@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.oprobots.robotaleh.pidfrombt"
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 4
-        versionName "1.0"
+        targetSdkVersion 27
+        versionCode 6
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,7 +26,8 @@ dependencies {
     })
     compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
     compile 'com.ogaclejapan.smarttablayout:library:1.2.1@aar'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.medyo:android-about-page:1.2.2'
     testCompile 'junit:junit:4.12'
 }

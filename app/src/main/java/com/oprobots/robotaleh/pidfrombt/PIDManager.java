@@ -9,14 +9,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -155,7 +158,7 @@ public class PIDManager extends AppCompatActivity {
                 BTSocket.close(); //close connection
 
                 if (get != null)
-                    Toast.makeText(getBaseContext(), "Conexión finalizada.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), getText(R.string.connectionFinished), Toast.LENGTH_SHORT).show();
             } catch (IOException ignored) {
             }
             finish(); //return to the first layout }
@@ -165,6 +168,7 @@ public class PIDManager extends AppCompatActivity {
 
     private void getSettings() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(PIDManager.this);
+        SharedPreferences.Editor settingsEditor = settings.edit();
         stopOnShake = settings.getBoolean("stopOnShake", true);
         maxCommandHistory = Integer.parseInt(settings.getString("maxCommandHistory", "150"));
         boolean hasSuction = settings.getBoolean("hasSuction", true);
@@ -178,40 +182,47 @@ public class PIDManager extends AppCompatActivity {
             intervals[INT_P][SOFT_INT] = parseFloat(settings.getString("softIntervalP", "1"));
         } catch (NumberFormatException e) {
             intervals[INT_P][SOFT_INT] = 1;
-            parsingErrors += "El intervalo suave de P es incorrecto.\n";
+            settingsEditor.putString("softIntervalP", "1");
+            parsingErrors += getString(R.string.softIntPErr) + "\n";
         }
         try {
             intervals[INT_P][HARD_INT] = parseFloat(settings.getString("hardIntervalP", "5"));
         } catch (NumberFormatException e) {
             intervals[INT_P][HARD_INT] = 5;
-            parsingErrors += "El intervalo fuerte de P es incorrecto.\n";
+            settingsEditor.putString("hardIntervalP", "5");
+            parsingErrors += getString(R.string.hardIntPErr) + "\n";
         }
         try {
             intervals[INT_I][SOFT_INT] = parseFloat(settings.getString("softIntervalI", "1"));
         } catch (NumberFormatException e) {
             intervals[INT_I][SOFT_INT] = 1;
-            parsingErrors += "El intervalo suave de I es incorrecto.\n";
+            settingsEditor.putString("softIntervalI", "1");
+            parsingErrors += getString(R.string.softIntIErr) + "\n";
         }
         try {
             intervals[INT_I][HARD_INT] = parseFloat(settings.getString("hardIntervalI", "5"));
         } catch (NumberFormatException e) {
             intervals[INT_I][HARD_INT] = 5;
-            parsingErrors += "El intervalo fuerte de I es incorrecto.\n";
+            settingsEditor.putString("hardIntervalI", "5");
+            parsingErrors += getString(R.string.hardIntIErr) + "\n";
         }
         try {
             intervals[INT_D][SOFT_INT] = parseFloat(settings.getString("softIntervalD", "1"));
         } catch (NumberFormatException e) {
             intervals[INT_D][SOFT_INT] = 1;
-            parsingErrors += "El intervalo suave de D es incorrecto.\n";
+            settingsEditor.putString("softIntervalD", "1");
+            parsingErrors += getString(R.string.softIntDErr) + "\n";
         }
         try {
             intervals[INT_D][HARD_INT] = parseFloat(settings.getString("hardIntervalD", "5"));
         } catch (NumberFormatException e) {
             intervals[INT_D][HARD_INT] = 5;
-            parsingErrors += "El intervalo fuerte de D es incorrecto.\n";
+            settingsEditor.putString("hardIntervalD", "5");
+            parsingErrors += getString(R.string.hardIntDErr) + "\n";
         }
         if (parsingErrors.length() > 0) {
-            parsingErrors += "Se han tomado los valores por defecto, revise los ajustes.";
+            settingsEditor.apply();
+            parsingErrors += getString(R.string.defaultValuesErr);
             Toast.makeText(PIDManager.this, parsingErrors, Toast.LENGTH_LONG).show();
         }
 
@@ -253,7 +264,7 @@ public class PIDManager extends AppCompatActivity {
     private void initShakeDetector() {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager == null) {
-            Toast.makeText(PIDManager.this, "No se ha podido acceder al mánager de sensores.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PIDManager.this, getText(R.string.sensorManagerError), Toast.LENGTH_SHORT).show();
             return;
         }
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -437,15 +448,15 @@ public class PIDManager extends AppCompatActivity {
             switch (txt.getId()) {
                 case R.id.txtP:
                     type = 'P';
-                    builderTxtValue.setTitle(Html.fromHtml("<font color='#c62828'>P</font><font color='#ef5350'>roporcional:</font>"));
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#c62828'>"+getString(R.string.firstP)+"</font><font color='#ef5350'>"+getString(R.string.lastP)+":</font>"));
                     break;
                 case R.id.txtI:
                     type = 'I';
-                    builderTxtValue.setTitle(Html.fromHtml("<font color='#00c853'>I</font><font color='#81c784'>ntegral:</font>"));
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#00c853'>"+getString(R.string.firstI)+"</font><font color='#81c784'>"+getString(R.string.lastI)+":</font>"));
                     break;
                 case R.id.txtD:
                     type = 'D';
-                    builderTxtValue.setTitle(Html.fromHtml("<font color='#1565c0'>D</font><font color='#7986cb'>erivativa:</font>"));
+                    builderTxtValue.setTitle(Html.fromHtml("<font color='#1565c0'>"+getString(R.string.firstD)+"</font><font color='#7986cb'>"+getString(R.string.lastD)+":</font>"));
                     break;
             }
             final char typeFinal = type;
@@ -467,11 +478,11 @@ public class PIDManager extends AppCompatActivity {
                         if (run)
                             manageSend(String.valueOf(typeFinal) + (((TextView) txt).getText().toString()));
                     } catch (NumberFormatException e) {
-                        Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PIDManager.this, getString(R.string.numberFormatError), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-            builderTxtValue.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            builderTxtValue.setNegativeButton(getString(R.string.cancelDialog), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -495,7 +506,7 @@ public class PIDManager extends AppCompatActivity {
                                     if (run)
                                         manageSend(String.valueOf(typeFinal) + (((TextView) txt).getText().toString()));
                                 } catch (NumberFormatException e) {
-                                    Toast.makeText(PIDManager.this, "Formato de número incorrecto", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PIDManager.this, getString(R.string.numberFormatError), Toast.LENGTH_SHORT).show();
                                 }
                                 dialog.dismiss();
                                 return true;
@@ -535,8 +546,10 @@ public class PIDManager extends AppCompatActivity {
                 run = !run;
                 if (run) {
                     item.setIcon(R.drawable.ic_stop_black_48dp);
+                    sendPIDIVS();
                 } else {
                     item.setIcon(R.drawable.ic_play_arrow_black_48dp);
+                    sendStop();
                 }
                 break;
 
@@ -550,9 +563,28 @@ public class PIDManager extends AppCompatActivity {
                 deleteConfig();
                 break;
             case R.id.calibrateThreshold:
-                isCalibrating = true;
-//                calibrateThreshold();
-                new CalibrateThreshold().execute();
+                new AlertDialog.Builder(PIDManager.this)
+                        .setTitle(getString(R.string.calibrationIntroTitle))
+                        .setIcon(R.drawable.logo_opr)
+                        .setMessage(getString(R.string.calibrationIntro))
+                        .setPositiveButton(getString(R.string.acceptDialog), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                final Handler handlerCalibration = new Handler();
+                                handlerCalibration.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        isCalibrating = true;
+                                        new CalibrateThreshold().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    }
+                                }, 600);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancelDialog), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -577,15 +609,14 @@ public class PIDManager extends AppCompatActivity {
 
     private void loadCurrentConfig() {
         if (configs.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "No hay configuraciones para cargar.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.noConfigsToLoad), Toast.LENGTH_SHORT).show();
             return;
         }
         AlertDialog.Builder builderLoad = new AlertDialog.Builder(PIDManager.this);
         builderLoad.setIcon(R.drawable.logo_opr);
-        builderLoad.setTitle("Seleccione la configuración que desea cargar");
+        builderLoad.setTitle(getString(R.string.selectConfigToLoad));
         int selectedIndex = -1;
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(PIDManager.this, android.R.layout.simple_list_item_single_choice);
-//                arrayAdapter.add("Hardik");
         for (int i = 0; i < configs.size(); i++) {
             arrayAdapter.add(configs.get(i));
             if (configs.get(i).equals(lastConfig)) {
@@ -593,7 +624,7 @@ public class PIDManager extends AppCompatActivity {
             }
         }
 
-        builderLoad.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builderLoad.setNegativeButton(getText(R.string.cancelDialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -637,11 +668,14 @@ public class PIDManager extends AppCompatActivity {
                         @Override
                         public void run() {
                             dialog.dismiss();
+                            if(run){
+                                sendPIDIVS();
+                            }
                         }
                     }, 200);
                 } else {
                     dialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "No se han podido recuperar los datos guardados.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.loadConfigError), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -656,11 +690,11 @@ public class PIDManager extends AppCompatActivity {
         editName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         new AlertDialog.Builder(this)
-                .setTitle("Nombre")
+                .setTitle(getString(R.string.nameDialog))
                 .setIcon(R.drawable.logo_opr)
-                .setMessage("Indique el nombre de la configuración que desea guardar.")
+                .setMessage(getString(R.string.configNameToSave))
                 .setView(editName)
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.acceptDialog), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String name = editName.getText().toString();
                         if (!configs.contains(name)) {
@@ -675,14 +709,14 @@ public class PIDManager extends AppCompatActivity {
                                 lastConfig = name;
                                 editor.apply();
                             } else {
-                                Toast.makeText(getApplicationContext(), "El nombre no puede estar en blanco, ni contener ';'.\nInténtelo de nuevo.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.configSpecialCharsError)+"\n"+getString(R.string.configTryAgainName), Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "El nombre ya se encuentra asignado a otra configuración.\nInténtelo de nuevo con otro nombre.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.configAlreadyUsedNameError)+"\n"+getString(R.string.configTryAgainName), Toast.LENGTH_LONG).show();
                         }
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancelDialog), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                     }
                 })
@@ -691,19 +725,19 @@ public class PIDManager extends AppCompatActivity {
 
     private void deleteConfig() {
         if (configs.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "No hay configuraciones para borrar.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.noConfigsToDelete), Toast.LENGTH_SHORT).show();
             return;
         }
         AlertDialog.Builder builderDelete = new AlertDialog.Builder(PIDManager.this);
         builderDelete.setIcon(R.drawable.logo_opr);
-        builderDelete.setTitle("Seleccione la configuración que desea eliminar");
+        builderDelete.setTitle(getString(R.string.selectConfigToDelete));
 
         final ArrayAdapter<String> arrayAdapterDel = new ArrayAdapter<>(PIDManager.this, android.R.layout.simple_list_item_single_choice);
         for (int i = 0; i < configs.size(); i++) {
             arrayAdapterDel.add(configs.get(i));
         }
 
-        builderDelete.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builderDelete.setNegativeButton(getString(R.string.cancelDialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -748,7 +782,13 @@ public class PIDManager extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress = ProgressDialog.show(PIDManager.this, "Conectando...", "Por favor, espere");  //show a progress dialog
+            progress = new ProgressDialog(PIDManager.this);
+            progress.setTitle(getString(R.string.connectingBT));
+            progress.setMessage(getString(R.string.plaseWait));
+            progress.setIcon(R.drawable.logo_opr);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.setCancelable(false);
+            progress.show();
         }
 
         @Override
@@ -756,28 +796,28 @@ public class PIDManager extends AppCompatActivity {
         {
             try {
                 if (BTSocket == null || !isBTConnected) {
-                    BTAdapter = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = BTAdapter.getRemoteDevice(address);//connects to the device's address and checks if it's available
-                    BTSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                    BTAdapter = BluetoothAdapter.getDefaultAdapter();//Obtiene el adaptador BT del móvil
+                    BluetoothDevice dispositivo = BTAdapter.getRemoteDevice(address);//Conecta con la dirección del dispositivo y comprueba si está disponible
+                    BTSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//Crea una conexion RFCOMM (SPP)
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    BTSocket.connect();//start connection
+                    BTSocket.connect();//Inicia la conexión
                 }
             } catch (IOException e) {
-                ConnectSuccess = false;//if the try failed, you can check the exception here
+                ConnectSuccess = false;//Captura cualquier error en la conexión
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        protected void onPostExecute(Void result)
         {
             super.onPostExecute(result);
 
             if (!ConnectSuccess) {
-                msg("La conexión ha fallado. Es un Bluetooth SPP? Inténtelo de nuevo.");
+                msg(getString(R.string.BtConnectionError));
                 finish();
             } else {
-                msg("Conectado.");
+                msg(getString(R.string.connectedBT));
                 isBTConnected = true;
                 try {
                     get = new GetMsg();
@@ -875,7 +915,8 @@ public class PIDManager extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progress = new ProgressDialog(PIDManager.this);
-            progress.setTitle("Agite el teléfono para calibrarlo");
+            progress.setTitle(getString(R.string.shakeToCalibrate));
+            progress.setIcon(R.drawable.logo_opr);
             progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progress.setMax(1000);
             progress.setCancelable(false);
@@ -917,8 +958,100 @@ public class PIDManager extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void emergecyStop() {
-        Toast.makeText(PIDManager.this, "shake", Toast.LENGTH_SHORT).show();
+        if(run){
+            run = false;
+            ActionMenuItemView stop = (ActionMenuItemView) findViewById(R.id.toggleRun);
+            stop.setIcon(getDrawable(R.drawable.ic_play_arrow_black_48dp));
+            sendStop();
+        }
+    }
+
+    private void sendPIDIVS() {
+        final Handler handlerX = new Handler();
+        handlerX.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                    manageSend("X" + String.valueOf(seekX.getProgress()-500));
+
+            }
+        }, 0);
+        final Handler handlerP = new Handler();
+        handlerP.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                    manageSend("P" + (txtP.getText().toString()));
+
+            }
+        }, 150);
+        final Handler handlerI = new Handler();
+        handlerI.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("I" + (txtI.getText().toString()));
+            }
+        }, 300);
+        final Handler handlerD = new Handler();
+        handlerD.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("D" + (txtD.getText().toString()));
+            }
+        }, 450);
+        final Handler handlerV = new Handler();
+        handlerV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("V" + String.valueOf(seekV.getProgress()));
+            }
+        }, 600);
+        final Handler handlerS = new Handler();
+        handlerS.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("S" + String.valueOf(seekS.getProgress()));
+            }
+        }, 750);
+    }
+
+    private void sendStop(){
+        final Handler handlerV = new Handler();
+        handlerV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("V0");
+
+            }
+        }, 150);
+        final Handler handlerP = new Handler();
+        handlerP.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("P0");
+            }
+        }, 300);
+        final Handler handlerI = new Handler();
+        handlerI.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("I0");
+            }
+        }, 450);
+        final Handler handlerD = new Handler();
+        handlerD.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("D0");
+            }
+        }, 600);
+        final Handler handlerS = new Handler();
+        handlerS.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manageSend("S0");
+            }
+        }, 750);
     }
 
     private void manageReceive(String msg) {
