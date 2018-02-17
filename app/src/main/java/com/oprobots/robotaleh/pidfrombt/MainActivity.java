@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -124,6 +125,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ACT_PAIRED:
+            case ACT_SEARCH:
+                if (BTAdapter.isEnabled()) {
+                    initBT(requestCode);
+                }
+                break;
+        }
     }
 
     /**
@@ -165,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //Pide al usuario que active el Bluetooth
                 Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(turnBTon, BLUETOOTH);
+                startActivityForResult(turnBTon, ACT_BT);
             }
         }
     }
@@ -229,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {  // Only ask for these permissions on runtime when running Android 6.0 or higher
                 switch (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     case PackageManager.PERMISSION_DENIED:
-                        final SpannableString permissionLink = new SpannableString(getString(R.string.newBtPermissionWarning)+"\n\n" + getString(R.string.newBtPermissionWarningInfo)+ " http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-hardware-id");
+                        final SpannableString permissionLink = new SpannableString(getString(R.string.newBtPermissionWarning) + "\n\n" + getString(R.string.newBtPermissionWarningInfo) + " http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-hardware-id");
                         Linkify.addLinks(permissionLink, Linkify.WEB_URLS);
                         final int REQUEST_ACCESS_COARSE_LOCATION = 1;
                         ((TextView) new AlertDialog.Builder(this)
@@ -328,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnLongClickListener longClickInfo = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            final SpannableString gitLink = new SpannableString(getString(R.string.aboutPIDfromBT)+"\n\n"+ getString(R.string.developedBy) + "\nhttp://github.com/robotaleh/PIDfromBT");
+            final SpannableString gitLink = new SpannableString(getString(R.string.aboutPIDfromBT) + "\n\n" + getString(R.string.developedBy) + "\nhttp://github.com/robotaleh/PIDfromBT");
             Linkify.addLinks(gitLink, Linkify.WEB_URLS);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();

@@ -1,6 +1,5 @@
 package com.oprobots.robotaleh.pidfrombt;
 
-import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
