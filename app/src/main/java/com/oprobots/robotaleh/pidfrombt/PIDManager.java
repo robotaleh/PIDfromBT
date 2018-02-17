@@ -379,8 +379,9 @@ public class PIDManager extends AppCompatActivity {
             if (Math.abs(val) > (float) (seekBar.getMax())) return;
             seekBar.setProgress(val);
             txtX.setText(String.valueOf(val - 500));
-            if (run)
+            if (run){
                 manageSend("X" + (txtX.getText().toString()));
+            }
             saveSharedPrefs("txtX", txtX.getText().toString());
             lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
@@ -405,8 +406,9 @@ public class PIDManager extends AppCompatActivity {
             if (val > seekBar.getMax()) return;
             seekBar.setProgress(val);
             txtV.setText(String.valueOf(val));
-            if (run)
+            if (run){
                 manageSend("V" + (txtV.getText().toString()));
+            }
             saveSharedPrefs("txtV", txtV.getText().toString());
             lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
@@ -431,8 +433,9 @@ public class PIDManager extends AppCompatActivity {
             if (val > seekBar.getMax()) return;
             seekBar.setProgress(val);
             txtS.setText(String.valueOf(val));
-            if (run)
+            if (run){
                 manageSend("S" + (txtS.getText().toString()));
+            }
             saveSharedPrefs("txtS", txtS.getText().toString());
             lastConfig = null; // Anula el registro de última config cargada al modificar algún campo
         }
