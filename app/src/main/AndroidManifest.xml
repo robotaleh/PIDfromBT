@@ -27,6 +27,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/PreferencesTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".OnboardingActivity"
