@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private final int ACT_SEARCH = 2;
 
 
-    boolean DEBUG = false;
+    boolean DEBUG = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
         // Comprueba si no se ha completado el onboarding
         if (!preferences.getBoolean("onboarding_complete", false)) {
             // Inicia la Activity onboarding
-            Intent onboarding = new Intent(this, OnboardingActivity.class);
+//            Intent onboarding = new Intent(this, OnboardingActivity.class);
+            Intent onboarding = new Intent(this, IntroActivity.class);
             startActivity(onboarding);
             // Cierra la MainActivity
             finish();

@@ -32,6 +32,9 @@
         <activity
             android:name=".OnboardingActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".AboutActivity"
             android:screenOrientation="portrait" />
     </application>
