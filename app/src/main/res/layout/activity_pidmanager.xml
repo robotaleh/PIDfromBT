@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.oprobots.robotaleh.pidfrombt.PIDManager">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#c0ca33"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/console"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#424242"
+                android:layout_gravity="fill"
+                android:paddingTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:text=""
+                android:textColor="#fff"
+                android:textSize="15sp"
+                android:scrollbars = "vertical"
+                android:gravity="bottom"
+                android:scrollbarThumbVertical="@xml/custom_scrollbar"
+                android:fadeScrollbars="false"/>
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:background="#e2f7c9"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            tools:context="com.oprobots.alexsantos.pidfrombt.PIDManager">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/firstP"
+                            android:textColor="#c62828"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lastP"
+                            android:textColor="#ef5350"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtP"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:paddingBottom="3dp"
+                        android:text="0.0"
+                        android:textAlignment="textEnd"
+                        android:textColor="#ef5350"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/hardUpP"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_upward_black_48dp"
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softUpP"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softDownP"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/hardDownP"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_downward_black_48dp"
+                        android:backgroundTint="#ef5350"
+                        tools:ignore="ContentDescription"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/firstI"
+                            android:textColor="#00c853"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lastI"
+                            android:textColor="#81c784"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:paddingBottom="3dp"
+                        android:text="0.0"
+                        android:textAlignment="textEnd"
+                        android:textColor="#81c784"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/hardUpI"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_upward_black_48dp"
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softUpI"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softDownI"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/hardDownI"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_downward_black_48dp"
+                        android:backgroundTint="#81c784"
+                        tools:ignore="ContentDescription"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/firstD"
+                            android:textColor="#1565c0"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lastD"
+                            android:textColor="#7986cb"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtD"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:paddingBottom="3dp"
+                        android:text="0.0"
+                        android:textAlignment="textEnd"
+                        android:textColor="#7986cb"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText,RtlCompat" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/hardUpD"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_upward_black_48dp"
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softUpD"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_up_black_48dp"
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/softDownD"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_48dp"
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/hardDownD"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onChangeButton"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_downward_black_48dp"
+                        android:backgroundTint="#7986cb"
+                        tools:ignore="ContentDescription"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/firstV"
+                        android:textColor="#fdd835"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lastV"
+                        android:textColor="#d4e157"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/txtV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
+
+                    <SeekBar
+                        android:id="@+id/seekV"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:max="255"
+                        android:progress="0" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/firstX"
+                        android:textColor="#c628c3"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lastX"
+                        android:textColor="#ef50e4"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/txtX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
+
+                    <SeekBar
+                        android:id="@+id/seekX"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:max="1000"
+                        android:progress="500" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/firstS"
+                        android:textColor="#35fafd"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lastS"
+                        android:textColor="#57e1da"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/txtS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="0"
+                        tools:ignore="HardcodedText"/>
+
+                    <SeekBar
+                        android:id="@+id/seekS"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:max="255"
+                        android:progress="0" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

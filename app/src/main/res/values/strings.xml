@@ -1,3 +1,137 @@
 <resources>
+    <!--OnBoarding Screen 1-->
+    <string name="bienvenido">Welcome!</string>
+    <string name="userNuevo">You seem to be a new user.</string>
+    <string name="veamosCosas">Let\'s take a look at everything you can do.</string>
+
+    <!--OnBoarding Screen 2-->
+    <string name="encontrarVincular">Search and pair!</string>
+    <string name="parPulsaciones">With only a couple of clicks.</string>
+    <string name="tambienDesemparejar">You can also unpair devices you don\'t use with a long press.</string>
+
+    <!--OnBoarding Screen 3-->
+    <string name="listarConectar">List and connect!</string>
+    <string name="pulsarConfigurar">With just a couple of clicks you can easily configure your PID.</string>
+
+    <!--OnBoarding Screen 4-->
+    <string name="configuraTodo">Configure everything!</string>
+    <string name="constantesConfig">From the three constants of the PID to the speed, the ideal on the track and even suction if it also had it.</string>
+
+    <!--OnBoarding Screen 5-->
+    <string name="paradaEmergencia">Emergency Stop!</string>
+    <string name="descEmergencia">You can calibrate the APP to instantly stop your robot just by shaking your phone or also disable it.</string>
+
+    <!--OnBoarding Screen 6-->
+    <string name="gestionConfigs">Manage your Configs!</string>
+    <string name="descConfigs">You can save all your settings to load them later and also delete those that you no longer need very easily.\nGoodbye to the pencil and paper!</string>
+
+    <!--OnBoarding Screen 7-->
+    <string name="customSettings">The way you want!</string>
+    <string name="descSettings">Set how much you want each variable to change, how many changes to save in the history and more.</string>
+
+    <!--Pantalla Principal-->
     <string name="app_name">PIDfromBT</string>
+    <string name="tituloPrincipal">PIDfromBT</string>
+    <string name="actualizarPareados">Update\npaired</string>
+    <string name="buscarNuevos">Search new\ndevices</string>
+    <string name="logoContentDesc">Extended APP\'s logo</string>
+    <string name="newBtPermissionWarning">To find nearby BT devices press "Allow" in the following dialog box and try again.</string>
+    <string name="newBtPermissionWarningInfo">For more information:</string>
+    <string name="newBtPermissionWarningTitle">Runtime permissions.</string>
+    <string name="searchingBtTitle">Searching Bluetooth Devices</string>
+    <string name="searchingBtDesc">Wait until the process is complete…</string>
+    <string name="BtPaired">Paired</string>
+    <string name="BtUnpaired">Unpaired</string>
+    <string name="aboutPIDfromBT">I\'s an Open-Source project of OPRobots mainly oriented to the calibration of the PID in linefollower robots or similar, although it can also be used in any project that makes use of that algorithm.</string>
+    <string name="developedBy">Developed by Alex Santos.</string>
+
+    <!--Activity PIDfromBT-->
+    <string name="firstP">P</string>
+    <string name="lastP">roportional</string>
+    <string name="firstI">I</string>
+    <string name="lastI">ntegral</string>
+    <string name="firstD">D</string>
+    <string name="lastD">erivative</string>
+    <string name="firstX">P</string>
+    <string name="lastX">osition</string>
+    <string name="firstV">S</string>
+    <string name="lastV">peed</string>
+    <string name="firstS">S</string>
+    <string name="lastS">uction</string>
+    <string name="connectingBT">Connecting…</string>
+    <string name="connectedBT">Connected</string>
+    <string name="connectionFinished">Connection finished.</string>
+    <string name="calibrationIntroTitle">Sensor calibration.</string>
+    <string name="calibrationIntro">In a moment, the sensor calibration process for the emergency stop will begin. Shake the device with the force you would like to apply to stop the robot immediately.</string>
+    <string name="shakeToCalibrate">Shake the phone to calibrate it</string>
+
+    <!--Menú-->
+    <string name="toggleRunPlayMenu">Play</string>
+    <string name="toggleRunStopMenu">Stop</string>
+    <string name="loadMenu">Load PID settings</string>
+    <string name="saveMenu">Save PID settings</string>
+    <string name="deleteMenu">Delete PID settings</string>
+    <string name="settingsMenu">Settings</string>
+
+    <!--Settings-->
+    <string name="stopOnShakeTitle">Emergency Stop</string>
+    <string name="stopOnShakeSummary">When the device is shaken, null values of PID and speed are sent to stop the robot in case of emergency</string>
+    <string name="hasSuctionTitle">Suction fan</string>
+    <string name="hasSuctionSummary">Extra speed control of the suction fan or other component PWM of the robot</string>
+    <string name="maxCommandHistoryTitle">Command history</string>
+    <string name="maxCommandHistorySummary">Determines the maximum number of action lines that will be saved in the summary console</string>
+    <string name="hardIntervalPTitle">Strong Proportional</string>
+    <string name="hardIntervalPSummary">Change made in the Proportional when clicking on large arrows</string>
+    <string name="softIntervalPTitle">Soft Proportional</string>
+    <string name="softIntervalPSummary">Change made in the Proportional by clicking on the small arrows</string>
+    <string name="hardIntervalITitle">Strong Integral</string>
+    <string name="hardIntervalISummary">Change made in the Integral when clicking on large arrows</string>
+    <string name="softIntervalITitle">Soft Integral</string>
+    <string name="softIntervalISummary">Change made in the Integral by clicking on the small arrows</string>
+    <string name="hardIntervalDTitle">Strong Derivative</string>
+    <string name="hardIntervalDSummary">Change made in the Derivative when clicking on large arrows</string>
+    <string name="softIntervalDTitle">Soft Derivative</string>
+    <string name="softIntervalDSummary">Change made in the Derivative by clicking on the small arrows</string>
+
+    <!--Errors-->
+    <string name="BtDeviceNotAvailable">Bluetooth device not available.</string>
+    <string name="pairedBtNotFound">No Linked Bluetooth Devices found.</string>
+    <string name="newBtDevicesNotAvailable">No Bluetooth devices available.</string>
+    <string name="unpairError">Unpairing error</string>
+    <string name="neutralError">An error has occurred:</string>
+
+    <string name="softIntPErr">The soft interval of P is incorrect.</string>
+    <string name="hardIntPErr">The strong interval of P is incorrect.</string>
+    <string name="softIntIErr">The soft interval of I is incorrect.</string>
+    <string name="hardIntIErr">The strong interval of I is incorrect.</string>
+    <string name="softIntDErr">The soft interval of D is incorrect.</string>
+    <string name="hardIntDErr">The strong interval of D is incorrect.</string>
+    <string name="defaultValuesErr">Se han tomado los valores por defecto, revise los ajustes.</string>
+
+    <string name="sensorManagerError">The sensor manager could not be accessed.</string>
+    <string name="numberFormatError">Incorrect number format.</string>
+    <string name="BtConnectionError">The connection has failed. Is it a SPP Bluetooth? Try again.</string>
+
+    <!--PID Configs-->
+    <string name="noConfigsToLoad">There are no settings to load.</string>
+    <string name="selectConfigToLoad">Select the settings you want to load</string>
+    <string name="loadConfigError">The saved data could not be recovered.</string>
+    <string name="configNameToSave">Enter the name of the settings you want to save.</string>
+    <string name="configSpecialCharsError">The name can not be blank, nor contain \';\'.</string>
+    <string name="configAlreadyUsedNameError">The name is already assigned to another settings.</string>
+    <string name="configTryAgainName">Try again with another name.</string>
+    <string name="noConfigsToDelete">There are no settings to delete.</string>
+    <string name="selectConfigToDelete">Select the settings you want to delete</string>
+
+
+    <!--Misc-->
+    <string name="cancelDialog">Cancel</string>
+    <string name="acceptDialog">OK</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="skip">Skip</string>
+    <string name="nameDialog">Name</string>
+    <string name="understandDialog">Understood</string>
+    <string name="plaseWait">Please,wait…</string>
+    <string name="aboutUsMenu">About us</string>
 </resources>
