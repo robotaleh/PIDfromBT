@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
                 Method method = device.getClass().getMethod("createBond", (Class[]) null);
                 method.invoke(device, (Object[]) null);
             } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "Se ha producido un error:\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.neutralError)+"\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -433,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
                         .getMethod("removeBond", (Class[]) null);
                 m.invoke(device, (Object[]) null);
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Error al Desemparejar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.unpairError), Toast.LENGTH_SHORT).show();
             }
             return true;
         }

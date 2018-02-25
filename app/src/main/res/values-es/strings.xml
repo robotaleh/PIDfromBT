@@ -14,9 +14,21 @@
     <string name="listarConectar">Listar y conectar!</string>
     <string name="pulsarConfigurar">Con solo un par de pulsaciones ya podrás configurar comodamente tu PID.</string>
 
-    <!--OnBoarding Screen 3-->
+    <!--OnBoarding Screen 4-->
     <string name="configuraTodo">Configúralo todo!</string>
     <string name="constantesConfig">Desde las tres constantes del PID hasta la velocidad, el ideal sobre la pista e incluso succión si también la tuviese.</string>
+
+    <!--OnBoarding Screen 5-->
+    <string name="paradaEmergencia">Parada de Emergencia!</string>
+    <string name="descEmergencia">Puedes calibrar la APP para parar instantaneamente tu robot solo con agitar tu teléfono o también deshabilitarlo.</string>
+
+    <!--OnBoarding Screen 6-->
+    <string name="gestionConfigs">Gestiona tus Configs!</string>
+    <string name="descConfigs">Puedes guardar todas tus configuraciones para cargarlas posteriormente y también eliminar las que ya no necesitesmuy fácilmente.\nAdiós al lapiz y papel!</string>
+
+    <!--OnBoarding Screen 7-->
+    <string name="customSettings">Todo a tu gusto!</string>
+    <string name="descSettings">Ajusta como quieres que cambie cada variable, cuantos cambios guardar en el historial y más.</string>
 
     <!--Pantalla Principal-->
     <string name="app_name">PIDfromBT</string>
@@ -85,7 +97,9 @@
     <!--Errors-->
     <string name="BtDeviceNotAvailable">Dispositivo Bluetooth no disponible.</string>
     <string name="pairedBtNotFound">No se han encontrado Dispositivos Bluetooth Vinculados.</string>
-    <string name="newBtDevicesNotAvailable">"No se han encontrado Dispositivos Bluetooth disponibles."</string>
+    <string name="newBtDevicesNotAvailable">No se han encontrado Dispositivos Bluetooth disponibles.</string>
+    <string name="unpairError">Error al Desemparejar</string>
+    <string name="neutralError">Se ha producido un error:</string>
 
     <string name="softIntPErr">El intervalo suave de P es incorrecto.</string>
     <string name="hardIntPErr">El intervalo fuerte de P es incorrecto.</string>
@@ -114,6 +128,9 @@
     <!--Misc-->
     <string name="cancelDialog">Cancelar</string>
     <string name="acceptDialog">Aceptar</string>
+    <string name="next">Siguiente</string>
+    <string name="done">Hecho</string>
+    <string name="skip">Saltar</string>
     <string name="nameDialog">Nombre</string>
     <string name="understandDialog">Entiendo</string>
     <string name="plaseWait">Por favor, espere…</string>
