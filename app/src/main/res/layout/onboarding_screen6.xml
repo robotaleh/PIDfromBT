@@ -10,18 +10,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/encontrarVincular"
+        android:layout_marginTop="15dp"
+        android:text="@string/gestionConfigs"
         android:textAlignment="center"
         android:textSize="25sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/parPulsaciones"
-        android:textAlignment="center"
-        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,21 +25,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/on_boarding_01_screenshot_search" />
+            android:src="@drawable/on_boarding_06_screenshot_save" />
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/on_boarding_02_screenshot_pair" />
+            android:src="@drawable/on_boarding_07_screenshot_load" />
 
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:text="@string/tambienDesemparejar"
+        android:layout_marginTop="5dp"
+        android:text="@string/descConfigs"
         android:textAlignment="center"
         android:textSize="16sp" />
+
 </LinearLayout>

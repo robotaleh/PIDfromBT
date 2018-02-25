@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 
-import com.gc.materialdesign.views.ButtonFlat;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 /**
@@ -19,6 +18,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 public class OnboardingActivity extends FragmentActivity {
 
+    private final int NUM_FRAGMENTS = 7;
     private ViewPager pager;
     private SmartTabLayout indicator;
     private Button skip;
@@ -38,6 +38,9 @@ public class OnboardingActivity extends FragmentActivity {
         final Fragment frag2 = new OnboardingFragment2();
         final Fragment frag3 = new OnboardingFragment3();
         final Fragment frag4 = new OnboardingFragment4();
+        final Fragment frag5 = new OnboardingFragment5();
+        final Fragment frag6 = new OnboardingFragment6();
+        final Fragment frag7 = new OnboardingFragment7();
 
         FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -51,6 +54,12 @@ public class OnboardingActivity extends FragmentActivity {
                         return frag3;
                     case 3:
                         return frag4;
+                    case 4:
+                        return frag5;
+                    case 5:
+                        return frag6;
+                    case 6:
+                        return frag7;
                     default:
                         return null;
                 }
@@ -58,7 +67,7 @@ public class OnboardingActivity extends FragmentActivity {
 
             @Override
             public int getCount() {
-                return 4;
+                return NUM_FRAGMENTS;
             }
         };
         pager.setAdapter(adapter);
@@ -74,7 +83,7 @@ public class OnboardingActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
 
-                if(pager.getCurrentItem() == 3) { // The last screen
+                if (pager.getCurrentItem() == NUM_FRAGMENTS - 1) { // The last screen
                     finishOnboarding();
                 } else {
                     pager.setCurrentItem(
@@ -87,7 +96,7 @@ public class OnboardingActivity extends FragmentActivity {
         indicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                if(position == 3){
+                if (position == NUM_FRAGMENTS - 1) {
                     skip.setVisibility(View.GONE);
                     next.setText("Hecho");
                 } else {
@@ -97,6 +106,7 @@ public class OnboardingActivity extends FragmentActivity {
             }
         });
     }
+
     private void finishOnboarding() {
         // Get the shared preferences
         SharedPreferences preferences =
@@ -104,7 +114,7 @@ public class OnboardingActivity extends FragmentActivity {
 
         // Set onboarding_complete to true
         preferences.edit()
-                .putBoolean("onboarding_complete",true).apply();
+                .putBoolean("onboarding_complete", true).apply();
 
         // Launch the main Activity, called MainActivity
         Intent main = new Intent(this, MainActivity.class);

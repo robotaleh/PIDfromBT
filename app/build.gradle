@@ -7,7 +7,7 @@ android {
         applicationId "com.oprobots.robotaleh.pidfrombt"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 7
+        versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
